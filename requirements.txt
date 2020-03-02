@@ -1,0 +1,4 @@
+fastapi[all]
+aiohttp[speedup]
+bs4[speedup]
+lxml
