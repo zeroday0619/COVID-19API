@@ -21,7 +21,7 @@ async def ConfirmationPatient():
     soup = await GetInfectiousDiseases()
     td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td")
     cp = cleanText(text=td[0])
-    return
+    return cp
 
 async def ConfirmationPatientIsolation():
     soup = await GetInfectiousDiseases()
@@ -40,3 +40,4 @@ async def Inspection():
     td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(4) > td")
     xo = cleanText(text=td[0])
     return xo
+
