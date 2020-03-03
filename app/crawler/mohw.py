@@ -3,19 +3,8 @@ import aiohttp
 import lxml
 import re
 from bs4 import BeautifulSoup
-from .utils import cleanText
-
-class Requests:
-    def __init__(self):
-        self.url = "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=&contSeq=&board_id=&gubun="
-
-    async def GetInfectiousDiseases(self):
-        loop = asyncio.get_event_loop()
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url=self.url) as resp:
-                info = await resp.text()
-        soup = await loop.run_in_executor(None, BeautifulSoup, info, 'lxml')
-        return soup
+from .utils.tool import cleanText
+from .utils.tool import Requests
 
 
 async def Result():
