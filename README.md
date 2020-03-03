@@ -16,7 +16,7 @@ uvicorn app.main:covid
 HTTP GET /info
 ```
 
-## 국내 시도별 발생 동향
+## 국내 COVID-19 시도별 발생 동향
 ```http
 HTTP GET /idr
 ```
