@@ -3,41 +3,82 @@ import aiohttp
 import lxml
 import re
 from bs4 import BeautifulSoup
+from .utils import cleanText
 
-def cleanText(text):
-    cleanT = re.sub('<.+?>', '', str(text))
-    return cleanT
+class Requests:
+    def __init__(self):
+        self.url = "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=&contSeq=&board_id=&gubun="
 
-async def GetInfectiousDiseases():
-    loop = asyncio.get_event_loop()
-    url = "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=&brdGubun=&ncvContSeq=&contSeq=&board_id=&gubun="
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            info = await resp.text()
-    soup = await loop.run_in_executor(None, BeautifulSoup, info, 'lxml')
+    async def GetInfectiousDiseases(self):
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=self.url) as resp:
+                info = await resp.text()
+        soup = await loop.run_in_executor(None, BeautifulSoup, info, 'lxml')
+        return soup
+
+
+async def Result():
+    data = Requests()
+    soup = await data.GetInfectiousDiseases()
     return soup
 
-async def ConfirmationPatient():
-    soup = await GetInfectiousDiseases()
-    td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td")
+async def CssSelect(data):
+    soup = await Result()
+    td = soup.select(data)
     cp = cleanText(text=td[0])
     return cp
 
-async def ConfirmationPatientIsolation():
-    soup = await GetInfectiousDiseases()
-    td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(2) > td")
-    xp = cleanText(text=td[0])
-    return xp
+class Query:
+    def __init__(self):
+        self.ConfirmationPatientCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td"
+        self.ConfirmationPatientIsolationCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(2) > td"
+        self.DeadCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(3) > td"
+        self.InspectionCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(4) > td"
 
-async def Dead():
-    soup = await GetInfectiousDiseases()
-    td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(3) > td")
-    vp = cleanText(text=td[0])
-    return vp
 
-async def Inspection():
-    soup = await GetInfectiousDiseases()
-    td = soup.select("#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(4) > td")
-    xo = cleanText(text=td[0])
-    return xo
+    async def ConfirmationPatient(self):
+        """확진환자"""
+        cp = await CssSelect(data=self.ConfirmationPatientCSS)
+        return cp
 
+    async def ConfirmationPatientIsolation(self):
+        """확진환자 격리해제"""
+        cpi = await CssSelect(data=self.ConfirmationPatientIsolationCSS)
+        return cpi
+
+    async def Dead(self):
+        """사망자"""
+        d = await CssSelect(data=self.DeadCSS)
+        return d
+
+    async def Inspection(self):
+        """검사진행"""
+        i = await CssSelect(data=self.InspectionCSS)
+        return i
+
+class InfectiousDiseases:
+    """Main Class
+    - ConfirmationPatient
+    - ConfirmationPatientIsolation
+    - Dead
+    - Inspection
+    """
+    def __init__(self):
+        self.data = Query()
+    
+    async def Convert(self) -> dict:
+        """
+        :return: json
+        """
+        a = await self.data.ConfirmationPatient()
+        b = await self.data.ConfirmationPatientIsolation()
+        c = await self.data.Dead()
+        d = await self.data.Inspection()
+        JsonData = {
+            "ConfirmationPatient": a,
+            "ConfirmationPatientIsolation": b,
+            "Dead": c,
+            "Inspection": d
+        }
+        return JsonData
