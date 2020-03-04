@@ -1,5 +1,6 @@
 fastapi[all]
 aiohttp[speedup]
 bs4[speedup]
+aioredis
 ujson
 lxml
