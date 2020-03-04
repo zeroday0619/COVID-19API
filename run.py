@@ -1,8 +1,10 @@
 from app.crawler.mohw import InfectiousDiseases
 from app.crawler.naver import InfectiousDiseasesbyRegion
+from datetime import datetime, timedelta
 from fastapi import FastAPI
 import fastapi
 import typing
+import ujson
 import pydantic
 import fastapi_plugins
 import aioredis
@@ -31,16 +33,32 @@ async def on_shutdown() -> None:
 
 @app.get("/info", tags=['info'])
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-    data = InfectiousDiseases()
-    Result = await data.Convert()
-    return Result
+    if not await cache.exists('info'):
+        data = InfectiousDiseases()
+        Result = await data.Convert()
+        rs = {
+            'info': Result
+        }
+        pb = ujson.dumps(rs).encode('utf-8')
+        await cache.set('info', pb, expire=3600)
+        return rs
+    else:
+        abc = await cache.get('info', encoding='utf-8')
+        adad = ujson.loads(abc)
+        return adad
 
 @app.get("/idr", tags=['idr'])
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-    data = InfectiousDiseasesbyRegion()
-    result = await data.IDR()
-    jsondata = {
-        "info": result
-    }
-    return jsondata
-
+    if not await cache.exists('idr'):
+        data = InfectiousDiseasesbyRegion()
+        result = await data.IDR()
+        jsondata = {
+            "idr": result
+        }
+        ob = ujson.dumps(jsondata).encode('utf-8')
+        await cache.set('idr', ob, expire=3600)
+        return jsondata
+    else:
+        abc = await cache.get('idr', encoding='utf-8')
+        adad = ujson.loads(abc)
+        return adad
