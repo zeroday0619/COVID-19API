@@ -20,10 +20,10 @@ async def CssSelect(data):
 
 class Query:
     def __init__(self):
-        self.ConfirmationPatientCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(1) > td"
-        self.ConfirmationPatientIsolationCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(2) > td"
-        self.DeadCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(3) > td"
-        self.InspectionCSS = "#content > div > div.bv_content > div > div:nth-child(3) > table > tbody > tr:nth-child(4) > td"
+        self.ConfirmationPatientCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(1) > td"
+        self.ConfirmationPatientIsolationCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(2) > td"
+        self.DeadCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(3) > td"
+        self.InspectionCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(4) > td"
 
 
     async def ConfirmationPatient(self):

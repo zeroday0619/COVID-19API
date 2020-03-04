@@ -35,7 +35,7 @@ class Requests:
     async def GetInfectiousDiseases(self):
         """국내 감염증 현황"""
         loop = asyncio.get_event_loop()
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(headers={"User-Agent": "Mozilla/5.0 (Linux; Android 10.0.0; SM-F700NZPAKOO) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.101 Mobile Safari/537.36"}) as session:
             async with session.get(url=self.mohurl) as resp:
                 info = await resp.text()
         soup = await loop.run_in_executor(None, BeautifulSoup, info, 'lxml')
