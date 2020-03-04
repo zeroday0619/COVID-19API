@@ -4,13 +4,13 @@ import lxml
 import re
 import ujson
 from bs4 import BeautifulSoup
-
-from .utils.tool import cleanText
-from .utils.tool import Requests
+from .utils import cleanText
+from .utils import NaverApi
 
 
 class InfectiousDiseasesbyRegion:
     def __init__(self):
+        self.data = NaverApi()
         self.templit: dict[str, Union[Optional[str], Any]] = {
             "regions": None,
             "info": {
@@ -20,8 +20,7 @@ class InfectiousDiseasesbyRegion:
         }
 
     async def Result(self):
-        data = Requests()
-        jsonData = await data.GetInfectiousDiseasesbyRegion()
+        jsonData = await self.data.GetInfectiousDiseasesbyRegion()
         length = len(jsonData)
         for item in jsonData:
             templit = self.templit

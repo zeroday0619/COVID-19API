@@ -3,23 +3,22 @@ import aiohttp
 import lxml
 import re
 from bs4 import BeautifulSoup
-from .utils.tool import cleanText
-from .utils.tool import Requests
+from .utils import KcdcApi
+from .utils import cleanText
 
+class Parser:
+    def __init__(self, mode=11):
+        self.data = KcdcApi(mode=mode)
 
-async def Result():
-    data = Requests()
-    soup = await data.GetInfectiousDiseases()
-    return soup
-
-async def CssSelect(data):
-    soup = await Result()
-    td = soup.select(data)
-    cp = cleanText(text=td[0])
-    return cp
+    async def CssSelect(self, data):
+        soup = await self.data.GetInfectiousDiseases()
+        td = soup.select(data)
+        cp = cleanText(text=td[0])
+        return cp
 
 class Query:
     def __init__(self):
+        self.Parser = Parser()
         self.ConfirmationPatientCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(1) > td"
         self.ConfirmationPatientIsolationCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(2) > td"
         self.DeadCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(3) > td"
@@ -28,23 +27,25 @@ class Query:
 
     async def ConfirmationPatient(self):
         """확진환자"""
-        cp = await CssSelect(data=self.ConfirmationPatientCSS)
+        cp = await self.Parser.CssSelect(data=self.ConfirmationPatientCSS)
         return cp
 
     async def ConfirmationPatientIsolation(self):
         """확진환자 격리해제"""
-        cpi = await CssSelect(data=self.ConfirmationPatientIsolationCSS)
+        cpi = await self.Parser.CssSelect(data=self.ConfirmationPatientIsolationCSS)
         return cpi
 
     async def Dead(self):
         """사망자"""
-        d = await CssSelect(data=self.DeadCSS)
+        d = await self.Parser.CssSelect(data=self.DeadCSS)
         return d
 
     async def Inspection(self):
         """검사진행"""
-        i = await CssSelect(data=self.InspectionCSS)
+        i = await self.Parser.CssSelect(data=self.InspectionCSS)
         return i
+
+
 
 class InfectiousDiseases:
     """Main Class
@@ -71,3 +72,7 @@ class InfectiousDiseases:
             "Inspection": d
         }
         return JsonData
+
+class ConfirmationPatientMovementRoute:
+    def __init__(self):
+        pass
