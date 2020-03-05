@@ -1,5 +1,4 @@
 from .kcdcAPI import kcdcAPI
-from .NaverAPI import NaverAPI
 import re
 
 def cleanText(text):
@@ -7,4 +6,3 @@ def cleanText(text):
     return cleanT
 
 KcdcApi = kcdcAPI
-NaverApi = NaverAPI
