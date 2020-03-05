@@ -1,3 +1,8 @@
+"""
+:author: zeroday0619
+:contact: zeroday0619(at)kakao.com
+:copyright: Copyright 2020, zeroday0619
+"""
 from app.crawler.mohw import InfectiousDiseases
 from app.crawler.naver import InfectiousDiseasesbyRegion
 from datetime import datetime, timedelta
@@ -8,6 +13,9 @@ import ujson
 import pydantic
 import fastapi_plugins
 import aioredis
+
+__author__ = 'zeroday0619 <zeroday0619(at)kakao.com>'
+__copyright__ = 'Copyright 2020, zeroday0619'
 
 class OtherSettings(pydantic.BaseSettings):
     other: str = 'other'
