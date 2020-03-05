@@ -80,7 +80,7 @@ class Parser2:
 
     async def Crawler(self) -> list:
         parser = Parser2()
-        soup = await parser.Request()
+        soup = await self.data.GetInfectiousDiseases()
         tbody = soup.find('tbody')
         tr = tbody.find_all('td')
         th = tbody.find_all('th')
