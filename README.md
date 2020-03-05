@@ -8,7 +8,7 @@ pip3 install -r requirements.txt
 ```
 
 ```
-uvicorn app.main:covid
+sudo uvicorn run:app --host 0.0.0.0 --port 80
 ```
 
 ## 국내 COVID-19 발생 현황
