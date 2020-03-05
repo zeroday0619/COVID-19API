@@ -4,7 +4,7 @@
 :copyright: Copyright 2020, zeroday0619
 """
 from app.crawler.mohw import InfectiousDiseases
-from app.crawler.naver import InfectiousDiseasesbyRegion
+from app.crawler.mohw import Parser2
 from datetime import datetime, timedelta
 from fastapi import FastAPI
 import fastapi
@@ -58,8 +58,8 @@ async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depend
 @app.get("/idr", tags=['idr'])
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
     if not await cache.exists('idr'):
-        data = InfectiousDiseasesbyRegion()
-        result = await data.IDR()
+        data = Parser2()
+        result = await data.SubCrawler()
         jsondata = {
             "idr": result
         }
