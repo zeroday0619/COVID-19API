@@ -4,7 +4,8 @@
 :copyright: Copyright 2020, zeroday0619
 """
 from app.crawler.mohw import InfectiousDiseases
-from app.crawler.mohw import Parser2
+from app.crawler.mohw import GetInfectiousDiseasesbyRegion
+from app.crawler.utils.kcdcAPI import Performance
 from datetime import datetime, timedelta
 from fastapi import FastAPI
 import fastapi
@@ -41,32 +42,34 @@ async def on_shutdown() -> None:
 
 @app.get("/info", tags=['info'])
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+    loop = Performance()
     if not await cache.exists('info'):
         data = InfectiousDiseases()
         Result = await data.Convert()
         rs = {
             'info': Result
         }
-        pb = ujson.dumps(rs).encode('utf-8')
+        pb = await loop.run_in_threadpool(lambda: ujson.dumps(rs).encode('utf-8'))
         await cache.set('info', pb, expire=3600)
         return rs
     else:
         abc = await cache.get('info', encoding='utf-8')
-        adad = ujson.loads(abc)
+        adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
         return adad
 
 @app.get("/idr", tags=['idr'])
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+    loop = Performance()
     if not await cache.exists('idr'):
-        data = Parser2()
+        data = GetInfectiousDiseasesbyRegion()
         result = await data.SubCrawler()
         jsondata = {
             "idr": result
         }
-        ob = ujson.dumps(jsondata).encode('utf-8')
+        ob = await loop.run_in_threadpool(lambda: ujson.dumps(jsondata).encode('utf-8'))
         await cache.set('idr', ob, expire=3600)
         return jsondata
     else:
         abc = await cache.get('idr', encoding='utf-8')
-        adad = ujson.loads(abc)
+        adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
         return adad
