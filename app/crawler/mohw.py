@@ -8,6 +8,7 @@ from .utils import KcdcApi
 from .utils.kcdcAPI import Performance
 from .utils import cleanText
 from .utils import JsonData
+from ..ext import route
 
 class Parser:
     def __init__(self, mode=11):
@@ -96,7 +97,19 @@ class GetInfectiousDiseasesbyRegion:
         for x in range(len(info)):
             inf = await cleanText(text=info[x])
             stat.append(inf)
-        listdata = stat
+        return stat
+
+    async def AllRegion(self) -> list:
         #TODO: 귀차니즘의 결과물
+        data = GetInfectiousDiseasesbyRegion()
+        listdata = await data.SubCrawler()
         jsonData = await JsonData(listdata)
         return jsonData
+    
+    async def Classification(self, regionNumber: int):
+        data = GetInfectiousDiseasesbyRegion()
+        rt = await data.AllRegion()
+        jsondata = await route(data=rt, regionNumber=regionNumber)
+        return jsondata
+
+
