@@ -8,6 +8,7 @@ from app.crawler.mohw import GetInfectiousDiseasesbyRegion
 from app.crawler.utils.kcdcAPI import Performance
 from datetime import datetime, timedelta
 from fastapi import FastAPI
+from pydantic import BaseModel
 import fastapi
 import typing
 import ujson
@@ -20,53 +21,68 @@ __copyright__ = 'Copyright 2020, zeroday0619'
 
 class OtherSettings(pydantic.BaseSettings):
     other: str = 'other'
-
 class AppSettings(OtherSettings, fastapi_plugins.RedisSettings):
     api_name: str = str(__name__)
 
-
 app = FastAPI()
 config = AppSettings()
+
+
+
 @app.get("/")
 async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
     return dict(ping=await cache.ping())
 
 @app.get("/kr/status", tags=['/kr/status'])
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-    loop = Performance()
-    if not await cache.exists('info'):
-        data = InfectiousDiseases()
-        Result = await data.Convert()
-        rs = {
-            'info': Result
-        }
-        pb = await loop.run_in_threadpool(lambda: ujson.dumps(rs).encode('utf-8'))
-        await cache.set('info', pb, expire=3600)
-        return rs
-    else:
-        abc = await cache.get('info', encoding='utf-8')
-        adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
-        return adad
+	"""# 국내 COVID-19 현황"""
+	loop = Performance()
+	if not await cache.exists('info'):
+		data = InfectiousDiseases()
+		Result = await data.Convert()
+		rs = {
+			'info': Result
+		}
+		pb = await loop.run_in_threadpool(lambda: ujson.dumps(rs).encode('utf-8'))
+		await cache.set('info', pb, expire=3600)
+		return rs
+	else:
+		abc = await cache.get('info', encoding='utf-8')
+		adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
+		return adad
 
 @app.get("/kr/status/region", tags=['/kr/status/region'])
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-    loop = Performance()
-    if not await cache.exists('idr'):
-        data = GetInfectiousDiseasesbyRegion()
-        result = await data.AllRegion()
-        jsondata = {
-            "idr": result
-        }
-        ob = await loop.run_in_threadpool(lambda: ujson.dumps(jsondata).encode('utf-8'))
-        #await cache.set('idr', ob, expire=3600)
-        return jsondata
-    else:
-        abc = await cache.get('idr', encoding='utf-8')
-        adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
-        return adad
+	"""# 지역 별 COVID-19 현황 조회"""
+	loop = Performance()
+	if not await cache.exists('idr'):
+		data = GetInfectiousDiseasesbyRegion()
+		result = await data.AllRegion()
+		jsondata = {
+			"idr": result
+		}
+		ob = await loop.run_in_threadpool(lambda: ujson.dumps(jsondata).encode('utf-8'))
+		#await cache.set('idr', ob, expire=3600)
+		return jsondata
+	else:
+		abc = await cache.get('idr', encoding='utf-8')
+		adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
+		return adad
 
 @app.get("/kr/status/region/{location}", tags=['/kr/status/region/{location}'])
 async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+	"""# 시도별 OVID-19 선택 현황 조회
+	## location
+		- seoul		- chungbuk
+		- busan		- chungnam
+		- daegu		- jeonbuk
+		- incheon	- jeonnam
+		- gwangju	- gyeongbuk
+		- daejeon	- gyeongnam
+		- ulsan		- jeju
+		- sejong	- gyeonggi
+		- gangwon
+	"""
 	data = GetInfectiousDiseasesbyRegion()
 	loop = Performance()
 	if location == 'seoul':
