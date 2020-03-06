@@ -12,7 +12,7 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 ```
 
 # API documentation
-[http://ncov.zeroday0619.kr/docs]()
+http://ncov.zeroday0619.kr/docs
 
 ## Extreme optimization
     - Powered by FastAPI framework
