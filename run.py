@@ -71,7 +71,7 @@ async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends
 
 @app.get("/kr/status/region/{location}", tags=['/kr/status/region/{location}'])
 async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-	"""# 시도별 OVID-19 선택 현황 조회
+	"""# 시도별 COVID-19 선택 현황 조회
 	## location
 		- seoul		- chungbuk
 		- busan		- chungnam
