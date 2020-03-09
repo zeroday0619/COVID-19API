@@ -3,34 +3,7 @@ import aiohttp
 import asyncio
 import lxml
 from bs4 import BeautifulSoup
-from concurrent.futures import ThreadPoolExecutor
-import sys
-sys.setrecursionlimit(10000)
-class Performance:
-    def __init__(self):
-        self.running_threads = 0 
-        self.max_threads = 6
-
-    async def run_in_threadpool(self, function):
-        global running_threads
-
-        while self.running_threads >= self.max_threads:
-            await asyncio.sleep(1)
-
-        with ThreadPoolExecutor(max_workers=1) as thread_pool:
-            running_threads = self.running_threads + 1
-
-            loop = asyncio.get_event_loop()
-            result = loop.run_in_executor(thread_pool, function)
-            try:
-                result = await result
-            except Exception as e:
-                raise e
-            finally:
-                running_threads = running_threads - 1
-                thread_pool.shutdown(wait=True)
-            return result
-
+from ...ext.Performance import Performance
 
 
 class kcdcAPI:

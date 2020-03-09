@@ -5,7 +5,8 @@
 """
 from app.crawler.mohw import InfectiousDiseases
 from app.crawler.mohw import GetInfectiousDiseasesbyRegion
-from app.crawler.utils.kcdcAPI import Performance
+from app.crawler.krnews import KrNewsParser
+from app.ext.Performance import Performance
 from datetime import datetime, timedelta
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -256,6 +257,26 @@ async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Dep
 			return _jeju
 	else:
 		return {"Error": "Error"}
+
+@app.get("/kr/news", tags=["/kr/news"])
+async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+	"""국내 코로나 관련 뉴스를 제공합니다.
+		10분 간격으로 news 정보 업데이트 됩니다.
+	"""
+	loop = Performance()
+	if not await cache.exists('news'):
+		data = KrNewsParser()
+		d = await data.query()
+		news = {
+			"news": d
+		}
+		_news = await loop.run_in_threadpool(lambda: ujson.dumps(news, ensure_ascii=False, escape_forward_slashes=False).encode('utf-8'))
+		await cache.set('news', _news, expire=600)
+		return 
+	else:
+		news = await cache.get('news')
+		_news = await loop.run_in_threadpool(lambda: ujson.loads(news))
+		return _news
 
 @app.on_event('startup')
 async def on_startup() -> None:
