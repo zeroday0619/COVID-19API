@@ -34,3 +34,70 @@ async def JsonData(listdata):
             {"JEJU":{"increase": listdata[85],"patient": listdata[86],"death": listdata[87],"ratio": listdata[88],"inspection": listdata[89]}}
     ]
     return jsondata
+
+async def NewsNogadaJsonData(a, b, c, d):
+    """노가다"""
+    #TODO: 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다 노가다
+    jsondata =[
+        {
+            "press": a[0],
+            "title": b[0],
+            "summary": c[0],
+            "link": d[0]
+        },
+        {
+            "press": a[1],
+            "title": b[1],
+            "summary": c[1],
+            "link": d[1]
+        },
+        {
+            "press": a[2],
+            "title": b[2],
+            "summary": c[2],
+            "link": d[2]
+        },
+        {
+            "press": a[3],
+            "title": b[3],
+            "summary": c[3],
+            "link": d[3]
+        },
+        {
+            "press": a[4],
+            "title": b[4],
+            "summary": c[4],
+            "link": d[4]
+        },
+        {
+            "press": a[5],
+            "title": b[5],
+            "summary": c[5],
+            "link": d[5]
+        },
+        {
+            "press": a[6],
+            "title": b[6],
+            "summary": c[6],
+            "link": d[6]
+        },
+        {
+            "press": a[7],
+            "title": b[7],
+            "summary": c[7],
+            "link": d[7]
+        },
+        {
+            "press": a[8],
+            "title": b[8],
+            "summary": c[8],
+            "link": d[8]
+        },
+        {
+            "press": a[9],
+            "title": b[9],
+            "summary": c[9],
+            "link": d[9]
+        }
+    ]
+    return jsondata

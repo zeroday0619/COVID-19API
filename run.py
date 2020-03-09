@@ -5,6 +5,7 @@
 """
 from app.crawler.mohw import InfectiousDiseases
 from app.crawler.mohw import GetInfectiousDiseasesbyRegion
+from app.crawler.krnews import KrNewsParser
 from app.crawler.utils.kcdcAPI import Performance
 from datetime import datetime, timedelta
 from fastapi import FastAPI
@@ -256,6 +257,21 @@ async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Dep
 			return _jeju
 	else:
 		return {"Error": "Error"}
+
+@app.get("/")
+async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+	if not await cache.exists('news'):
+		data = KrNewsParser()
+		news = {
+			"news": data.query()
+		}
+		_news = await loop.run_in_threadpool(lambda: ujson.dumps(jeju).encode('utf-8'))
+		await cache.set('news', _news, expire=600)
+		return 
+	else:
+		news = await cache.get('news')
+		_news = await loop.run_in_threadpool(lambda: ujson.loads(news))
+		return _news
 
 @app.on_event('startup')
 async def on_startup() -> None:
