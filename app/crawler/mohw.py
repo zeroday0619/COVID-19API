@@ -72,10 +72,10 @@ class InfectiousDiseases:
         c = await self.data.Dead()
         d = await self.data.Inspection()
         JsonData = {
-            "ConfirmationPatient": a,
-            "ConfirmationPatientIsolation": b,
-            "Dead": c,
-            "Inspection": d
+            "patient": a,
+            "isolation": b,
+            "death": c,
+            "inspection": d
         }
         return JsonData
 
