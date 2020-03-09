@@ -40,5 +40,5 @@ class KrNewsParser:
         for i in _summary:
             ___summary = await cleanText(i)
             summary.append(___summary)       
-        jsondata = await NewsNogadaJsonData(a=press, b=title, c=summary, d=link)
+        jsondata = await NewsNogadaJsonData(a=title, b=press, c=summary, d=link)
         return jsondata
