@@ -31,11 +31,11 @@ class KrNewsParser:
         press = []
         for i in _press:
             ___press = await cleanText(i)
-            press.append(___press.replace("선정", ""))
+            press.append(___press)
         title = []
         for i in _title:
             ___title = await cleanText(i)
-            title.append(___title)
+            title.append(___title.replace("선정", ""))
         summary = []
         for i in _summary:
             ___summary = await cleanText(i)
