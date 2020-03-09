@@ -1,27 +1,25 @@
 import asyncio
 import aiohttp
 import ujson
-import scrapy
 import re
 
 from scrapy.selector import Selector
 from scrapy.crawler import CrawlerRunner
+from ..ext.Performance import Performance
 from .utils.news import CoronaNewsCrawler 
-from ..ext import Performance
-from ..utils import NewsNogadaJsonData
+from .utils import NewsNogadaJsonData
+from .utils import cleanText
 
-async def get():
-    o = CoronaNewsCrawler().Request
-    return o
+
 
 
 class KrNewsParser:
-    async def __init__(self):
+    def __init__(self):
         self.loop = Performance()
-        self.CoronaNews = await get()
+        self.data = CoronaNewsCrawler()
     
     async def query(self):
-        soup = self.CoronaNews()
+        soup = await self.data.Request()
         a = await self.loop.run_in_threadpool(lambda: Selector(text=soup))
         description = await self.loop.run_in_threadpool(lambda: a.css("#main_pack > div.news.mynews.section._prs_nws > ul > li > dl"))
         __press = await self.loop.run_in_threadpool(lambda: description.css("dt > a"))

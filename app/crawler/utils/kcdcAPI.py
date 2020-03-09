@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import lxml
 from bs4 import BeautifulSoup
-from ...ext import Performance
+from ...ext.Performance import Performance
 
 
 class kcdcAPI:

@@ -1,5 +1,6 @@
 import asyncio
 import aiohttp
+from ...ext.Performance import Performance
 
 class CoronaNewsCrawler:
     def __init__(self):
@@ -11,6 +12,7 @@ class CoronaNewsCrawler:
             "mynews": '0',
             "tqi": "UEfQtdp0YiRssPppOAossssstyG-455013"
         }
+        self.loop = Performance()
     async def Request(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.url, params=self.payload) as resp:

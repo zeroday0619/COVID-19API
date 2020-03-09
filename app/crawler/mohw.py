@@ -6,7 +6,7 @@ import re
 
 from bs4 import BeautifulSoup
 from .utils import KcdcApi
-from ..ext import Performance
+from ..ext.Performance import Performance
 from .utils import cleanText
 from .utils import JsonData
 from ..ext import route
