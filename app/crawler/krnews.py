@@ -35,7 +35,7 @@ class KrNewsParser:
         title = []
         for i in _title:
             ___title = await cleanText(i)
-            title.append(___title.replace("선정", ""))
+            title.append(___title.replace("선정", "").replace("언론사", ""))
         summary = []
         for i in _summary:
             ___summary = await cleanText(i)
