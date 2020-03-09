@@ -272,7 +272,7 @@ async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.dep
 		}
 		_news = await loop.run_in_threadpool(lambda: ujson.dumps(news, ensure_ascii=False, escape_forward_slashes=False).encode('utf-8'))
 		await cache.set('news', _news, expire=600)
-		return 
+		return news
 	else:
 		news = await cache.get('news')
 		_news = await loop.run_in_threadpool(lambda: ujson.loads(news))
