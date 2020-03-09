@@ -10,9 +10,6 @@ from .utils.news import CoronaNewsCrawler
 from .utils import NewsNogadaJsonData
 from .utils import cleanText
 
-
-
-
 class KrNewsParser:
     def __init__(self):
         self.loop = Performance()

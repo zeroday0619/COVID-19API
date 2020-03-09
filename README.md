@@ -6,7 +6,6 @@
 ## DESCRIPTION
 **COVID-19API는 대한민국 질병관리본부가 공개한 자료를 사용합니다.**
 
-
 ## Usage
 ```
 pip3 install -r requirements.txt
@@ -26,3 +25,9 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
     - Cache: Redis
     - asynchronous
 ![TTFB 15.66ms](/src/img/TTFB.png)
+
+
+## License
+[MIT License](https://github.com/zeroday0619/COVID-19API/blob/master/LICENSE)
+
+Copyright © zeroday0619 [차의서, Euiseo Cha]
