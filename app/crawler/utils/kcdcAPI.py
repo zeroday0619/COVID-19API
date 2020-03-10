@@ -1,9 +1,10 @@
-import re
 import aiohttp
 import asyncio
 import lxml
-from bs4 import BeautifulSoup
+import re
+
 from ...ext.Performance import Performance
+from bs4 import BeautifulSoup
 
 
 class kcdcAPI:
@@ -31,3 +32,9 @@ class kcdcAPI:
                 info = await resp.text()
         soup = await self.loop.run_in_threadpool(lambda: BeautifulSoup(info, 'lxml'))
         return soup
+    
+    async def GetInfectiousDiseases2(self):
+        async with aiohttp.ClientSession(headers=self.headers) as session:
+            async with session.get(url="http://ncov.mohw.go.kr/") as resp:
+                info = await resp.text()
+        return info

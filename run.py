@@ -9,6 +9,8 @@ from app.ext.location import loc
 from app.ext.krstatus import krstatus
 from app.ext.KrStatusRegion import KrStatusRegion
 from app.ext.KrNews import KrNews
+from app.ext.KrCumulative import KrCumulativeInspection
+from app.ext.ApiJson import OneJson
 from datetime import datetime, timedelta
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -34,14 +36,15 @@ config = AppSettings()
 
 @app.get("/")
 async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-    return dict(ping=await cache.ping())
+	return dict(ping=await cache.ping())
 
 @app.get("/kr/status", tags=['/kr/status'])
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""# 국내 COVID-19 현황"""
 	loop = Performance()
 	Result = await krstatus(cache=cache, loop=loop)
-	return Result
+	res = await OneJson(Result)
+	return res
 
 
 @app.get("/kr/status/region", tags=['/kr/status/region'])
@@ -49,7 +52,8 @@ async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends
 	"""# 지역 별 COVID-19 현황 조회"""
 	loop = Performance()
 	Result = await KrStatusRegion(cache=cache, loop=loop)
-	return Result
+	res = await OneJson(Result)
+	return res
 
 
 @app.get("/kr/status/region/{location}", tags=['/kr/status/region/{location}'])
@@ -69,7 +73,16 @@ async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Dep
 	data = GetInfectiousDiseasesbyRegion()
 	loop = Performance()
 	Result = await loc(location=location, data=data, loop=loop, cache=cache)
-	return Result
+	res = await OneJson(Result)
+	return res
+
+@app.get("/kr/status/inspection", tags=['/kr/status/inspection'])
+async def CumulativeInspection(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+	"""국내 검사 현황 | 누적 확진률"""
+	loop = Performance()
+	Result = await KrCumulativeInspection(loop=loop, cache=cache)
+	res = await OneJson(Result)
+	return res
 
 @app.get("/kr/news", tags=["/kr/news"])
 async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
@@ -78,7 +91,8 @@ async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.dep
 	"""
 	loop = Performance()
 	Result = await KrNews(cache=cache, loop=loop)
-	return Result
+	res = await OneJson(Result)
+	return res
 
 @app.on_event('startup')
 async def on_startup() -> None:

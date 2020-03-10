@@ -5,52 +5,12 @@ import lxml
 import re
 
 from bs4 import BeautifulSoup
+from scrapy.selector import Selector
 from .utils import KcdcApi
 from ..ext.Performance import Performance
 from .utils import cleanText
 from .utils import JsonData
 from ..ext import route
-
-class Parser:
-    def __init__(self, mode=11):
-        self.data = KcdcApi(mode=mode)
-        self.loop = Performance()
-
-    async def CssSelect(self, data):
-        soup = await self.data.GetInfectiousDiseases()
-        td = await self.loop.run_in_threadpool(lambda: soup.select(data))
-        cp = await cleanText(text=td[0])
-        return cp
-
-class Query:
-    def __init__(self):
-        self.Parser = Parser()
-        self.ConfirmationPatientCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(1) > td"
-        self.ConfirmationPatientIsolationCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(2) > td"
-        self.DeadCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(3) > td"
-        self.InspectionCSS = "#content > div > div.bv_content > div > div > table > tbody > tr:nth-of-type(4) > td"
-
-
-    async def ConfirmationPatient(self):
-        """확진환자"""
-        cp = await self.Parser.CssSelect(data=self.ConfirmationPatientCSS)
-        return cp
-
-    async def ConfirmationPatientIsolation(self):
-        """확진환자 격리해제"""
-        cpi = await self.Parser.CssSelect(data=self.ConfirmationPatientIsolationCSS)
-        return cpi
-
-    async def Dead(self):
-        """사망자"""
-        d = await self.Parser.CssSelect(data=self.DeadCSS)
-        return d
-
-    async def Inspection(self):
-        """검사진행"""
-        i = await self.Parser.CssSelect(data=self.InspectionCSS)
-        return i
-
 
 
 class InfectiousDiseases:
@@ -60,23 +20,72 @@ class InfectiousDiseases:
     - Dead
     - Inspection
     """
-    def __init__(self):
-        self.data = Query()
+    def __init__(self, mode=11):
+        self.data = KcdcApi(mode=mode)
+        self.loop = Performance()
     
     async def Convert(self) -> dict:
         """
         :return: json
         """
-        a = await self.data.ConfirmationPatient()
-        b = await self.data.ConfirmationPatientIsolation()
-        c = await self.data.Dead()
-        d = await self.data.Inspection()
-        JsonData = {
-            "patient": a,
-            "isolation": b,
-            "death": c,
-            "inspection": d
-        }
+        data = await self.data.GetInfectiousDiseases2()
+        soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
+
+        patient = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[1]/span[1]"))
+        patientrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[1]/span[2]"))
+        
+        isolation = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[2]/span[1]"))
+        isolationrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[2]/span[2]"))
+
+        inisolation = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[3]/span[1]"))
+        inisolationrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[3]/span[2]"))
+
+        death = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[4]/span[1]"))
+        deathrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[4]/span[2]"))
+
+        _patient = await self.loop.run_in_threadpool(lambda: patient.getall())
+        _patientrate = await self.loop.run_in_threadpool(lambda: patientrate.getall())
+
+        _isolation = await self.loop.run_in_threadpool(lambda: isolation.getall())
+        _isolationrate = await self.loop.run_in_threadpool(lambda: isolationrate.getall())
+
+        _inisolation = await self.loop.run_in_threadpool(lambda: inisolation.getall())
+        _inisolationrate = await self.loop.run_in_threadpool(lambda: inisolationrate.getall())
+
+        _death = await self.loop.run_in_threadpool(lambda: death.getall())
+        _deathrate = await self.loop.run_in_threadpool(lambda: deathrate.getall())        
+
+        a = await cleanText(_patient[0]+ "명")
+        b = await cleanText(_patientrate[0]+ "명")
+
+        c = await cleanText(_isolation[0]+ "명")
+        d = await cleanText(_isolationrate[0]+ "명")
+        
+        _a = await cleanText(_inisolation[0]+ "명")
+        _b = await cleanText(_inisolationrate[0]+ "명")
+        
+        _c = await cleanText(_death[0]+ "명")
+        _d = await cleanText(_deathrate[0]+ "명")
+
+        
+        JsonData = [
+            {
+                "patient": a,
+                "compared": b
+            },
+            {
+                "isolation": c,
+                "compared":d
+            },
+            {
+                "in_isolation": _a,
+                "compared": _b
+            },
+            {
+                "death": _c,
+                "compared": _d
+            }
+        ]
         return JsonData
 
 class GetInfectiousDiseasesbyRegion:
