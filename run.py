@@ -10,7 +10,6 @@ from app.ext.krstatus import krstatus
 from app.ext.KrStatusRegion import KrStatusRegion
 from app.ext.KrNews import KrNews
 from app.ext.KrCumulative import KrCumulativeInspection
-from app.ext.ApiJson import OneJson
 from datetime import datetime, timedelta
 from fastapi import FastAPI
 from pydantic import BaseModel
