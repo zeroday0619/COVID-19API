@@ -3,22 +3,28 @@
 :contact: zeroday0619(at)kakao.com
 :copyright: Copyright 2020, zeroday0619
 """
-from app.crawler.mohw import GetInfectiousDiseasesbyRegion
-from app.ext.Performance import Performance
-from app.ext.location import loc
-from app.ext.krstatus import krstatus
-from app.ext.KrStatusRegion import KrStatusRegion
-from app.ext.KrNews import KrNews
-from app.ext.KrCumulative import KrCumulativeInspection
-from datetime import datetime, timedelta
-from fastapi import FastAPI
-from pydantic import BaseModel
 import fastapi
 import typing
 import ujson
 import pydantic
-import fastapi_plugins
 import aioredis
+import fastapi_plugins
+from fastapi import FastAPI
+from pydantic import BaseModel
+from starlette.responses import RedirectResponse, Response
+from app.crawler.mohw import GetInfectiousDiseasesbyRegion
+from app.ext.KrCumulative import KrCumulativeInspection
+from app.ext.KrStatusRegion import KrStatusRegion
+from app.ext.Performance import Performance
+from datetime import datetime, timedelta
+from app.ext.krstatus import krstatus
+from app.ext.KrNews import KrNews
+from app.ext.location import loc
+
+
+
+
+
 
 __author__ = 'zeroday0619 <zeroday0619(at)kakao.com>'
 __copyright__ = 'Copyright 2020, zeroday0619'
@@ -40,7 +46,8 @@ config = AppSettings()
 
 @app.get("/")
 async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
-	return dict(ping=await cache.ping())
+	return RedirectResponse('/docs')
+
 
 @app.get("/kr/status", tags=['/kr/status'])
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
