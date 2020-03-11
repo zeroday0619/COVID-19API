@@ -115,15 +115,15 @@ class InfectiousDiseases:
         Total = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[8]")) # 합계
         jsondata = {
             "ConfirmationPatient":{
-                "InIsolation": InIsolation,
-                "Quarantine": Quarantine,
-                "Death": Death,
-                "SubTotal": SubTotal
+                "InIsolation": await cleanText(await self.loop.run_in_threadpool(lambda: InIsolation.getall()[0])+"명"),
+                "Quarantine": await cleanText(await self.loop.run_in_threadpool(lambda: Quarantine.getall()[0])+"명"),
+                "Death": await cleanText(await self.loop.run_in_threadpool(lambda: Death.getall()[0])+"명"),
+                "SubTotal": await cleanText(await self.loop.run_in_threadpool(lambda: SubTotal.getall()[0])+"명"),
             },
-            "NegativeResult": NegativeResult,
-            "InspectionCompleted": InspectionCompleted,
-            "UnderInspection": UnderInspection,
-            "Total": Total
+            "NegativeResult": await cleanText(await self.loop.run_in_threadpool(lambda: NegativeResult.getall()[0])+"명"),
+            "InspectionCompleted": await cleanText(await self.loop.run_in_threadpool(lambda: InspectionCompleted.getall()[0])+"명"),
+            "UnderInspection": await cleanText(await self.loop.run_in_threadpool(lambda: UnderInspection.getall()[0])+"명"),
+            "Total": await cleanText(await self.loop.run_in_threadpool(lambda: Total.getall()[0])+"명")
         }
         return jsondata
 
