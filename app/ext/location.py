@@ -171,4 +171,4 @@ async def loc(location, data, loop, cache):
 			_jeju = await loop.run_in_threadpool(lambda: ujson.loads(jeju))
 			return _jeju
 	else:
-		return {"Error": "Error"}
+		return {"Error": "Not Found"}

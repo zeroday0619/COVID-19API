@@ -70,20 +70,20 @@ class InfectiousDiseases:
         
         JsonData = [
             {
-                "patient": a,
-                "compared": b
+                "patient": a.replace("(누적)", "").strip(),
+                "compared": b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
             },
             {
                 "isolation": c,
-                "compared":d
+                "compared":d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
             },
             {
                 "in_isolation": _a,
-                "compared": _b
+                "compared": _b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
             },
             {
                 "death": _c,
-                "compared": _d
+                "compared": _d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
             }
         ]
         return JsonData
