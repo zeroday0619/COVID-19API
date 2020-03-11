@@ -62,7 +62,7 @@ async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depend
 	return Result
 
 
-@app.get("/kr/status/region", tags=['지역 별 COVID-19 현황 조회'])
+@app.get("/kr/status/region", tags=['시도별 COVID-19 현황 조회'])
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""# 지역 별 COVID-19 현황 조회
 	## 대한민국 질병관리본부 
