@@ -38,3 +38,9 @@ class kcdcAPI:
             async with session.get(url="http://ncov.mohw.go.kr/") as resp:
                 info = await resp.text()
         return info
+    async def GetInfectiousDiseases3(self):
+        """국내 감염증 정보 파싱"""
+        async with aiohttp.ClientSession(headers=self.headers) as session:
+            async with session.get(url=self.url, params=self.payload) as resp:
+                info = await resp.text()
+        return info

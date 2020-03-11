@@ -1,4 +1,5 @@
-import ujson	
+import ujson
+from fastapi import HTTPException
     
 async def loc(location, data, loop, cache):
 	if location == 'seoul':
@@ -171,4 +172,5 @@ async def loc(location, data, loop, cache):
 			_jeju = await loop.run_in_threadpool(lambda: ujson.loads(jeju))
 			return _jeju
 	else:
-		return {"Error": "Not Found"}
+		raise HTTPException(status=404, detail="Location not found")
+		

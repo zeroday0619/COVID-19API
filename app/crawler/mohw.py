@@ -87,6 +87,45 @@ class InfectiousDiseases:
             }
         ]
         return JsonData
+    async def InspectionStatusDetail(self):
+        """대한민국 COVID-19 검사 - Detail
+        - InIsolation: 격리중
+        - Quarantine: 격리 해제
+        - Death: 사망
+        - SubTotal: 소계
+        - NegativeResult: 결과 음성
+        - InspectionCompleted: 검사 결과 소계
+        - UnderInspection: 검사 중...
+        - Total: 합계
+
+        """
+        data = await self.data.GetInfectiousDiseases3()
+        soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
+        
+        """Inspection completed"""
+        InIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[1]")) # 격리중
+        Quarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[2]")) # 격리 해제
+        Death = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[3]")) # 사망
+        SubTotal = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[4]")) # 소계
+        NegativeResult = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[5]")) # 결과 음성
+        InspectionCompleted = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[6]")) # 검사 결과 소계
+
+        """Inspection....."""
+        UnderInspection = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[7]")) # 검사 중......
+        Total = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[8]")) # 합계
+        jsondata = {
+            "ConfirmationPatient":{
+                "InIsolation": InIsolation,
+                "Quarantine": Quarantine,
+                "Death": Death,
+                "SubTotal": SubTotal
+            },
+            "NegativeResult": NegativeResult,
+            "InspectionCompleted": InspectionCompleted,
+            "UnderInspection": UnderInspection,
+            "Total": Total
+        }
+        return jsondata
 
 class GetInfectiousDiseasesbyRegion:
     def __init__(self, mode=13):
