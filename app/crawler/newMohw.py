@@ -35,9 +35,9 @@ class Paser:
         il = await Paser().Select()
         jsondata = {
             "inspection":{
-                "accumulate": il[1],
-                "completions": il[3],
-                "rate": il[5]
+                "accumulate": int(il[1].replace(",", '').replace("건", '')),
+                "completions": int(il[3].replace(",", '').replace("건", '')),
+                "rate": float(il[5].replace(",", '').replace("%", ''))
             },
             "description": il[6]
         }

@@ -55,35 +55,34 @@ class InfectiousDiseases:
         _death = await self.loop.run_in_threadpool(lambda: death.getall())
         _deathrate = await self.loop.run_in_threadpool(lambda: deathrate.getall())        
 
-        a = await cleanText(_patient[0]+ "명")
-        b = await cleanText(_patientrate[0]+ "명")
+        a = await cleanText(_patient[0])
+        b = await cleanText(_patientrate[0])
 
-        c = await cleanText(_isolation[0]+ "명")
-        d = await cleanText(_isolationrate[0]+ "명")
+        c = await cleanText(_isolation[0])
+        d = await cleanText(_isolationrate[0])
         
-        _a = await cleanText(_inisolation[0]+ "명")
-        _b = await cleanText(_inisolationrate[0]+ "명")
+        _a = await cleanText(_inisolation[0])
+        _b = await cleanText(_inisolationrate[0])
         
-        _c = await cleanText(_death[0]+ "명")
-        _d = await cleanText(_deathrate[0]+ "명")
+        _c = await cleanText(_death[0])
+        _d = await cleanText(_deathrate[0])
 
-        
         JsonData = [
             {
-                "patient": a.replace("(누적)", "").strip(),
-                "compared": b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
+                "patient": int(a.replace("(누적)", "").strip().replace(",", '')),
+                "compared": int(b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
             },
             {
-                "isolation": c,
-                "compared":d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
+                "isolation": int(c.replace(",", '')),
+                "compared": int(d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
             },
             {
-                "in_isolation": _a,
-                "compared": _b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
+                "in_isolation": int(_a.replace(",", '')),
+                "compared": int(_b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
             },
             {
-                "death": _c,
-                "compared": _d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip()
+                "death": int(_c.replace(",", '')),
+                "compared": int(_d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
             }
         ]
         return JsonData
@@ -113,17 +112,26 @@ class InfectiousDiseases:
         """Inspection....."""
         UnderInspection = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[7]")) # 검사 중......
         Total = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[4]/table/tbody/tr/td[8]")) # 합계
+
+        a = await cleanText(await self.loop.run_in_threadpool(lambda: InIsolation.getall()[0]))
+        b = await cleanText(await self.loop.run_in_threadpool(lambda: Quarantine.getall()[0]))
+        c = await cleanText(await self.loop.run_in_threadpool(lambda: Death.getall()[0]))
+        d = await cleanText(await self.loop.run_in_threadpool(lambda: SubTotal.getall()[0]))
+        e = await cleanText(await self.loop.run_in_threadpool(lambda: NegativeResult.getall()[0]))
+        f = await cleanText(await self.loop.run_in_threadpool(lambda: InspectionCompleted.getall()[0]))
+        g = await cleanText(await self.loop.run_in_threadpool(lambda: UnderInspection.getall()[0]))
+        h = await cleanText(await self.loop.run_in_threadpool(lambda: Total.getall()[0]))
         jsondata = {
             "ConfirmationPatient":{
-                "InIsolation": await cleanText(await self.loop.run_in_threadpool(lambda: InIsolation.getall()[0])+"명"),
-                "Quarantine": await cleanText(await self.loop.run_in_threadpool(lambda: Quarantine.getall()[0])+"명"),
-                "Death": await cleanText(await self.loop.run_in_threadpool(lambda: Death.getall()[0])+"명"),
-                "SubTotal": await cleanText(await self.loop.run_in_threadpool(lambda: SubTotal.getall()[0])+"명"),
+                "InIsolation": int(a.replace(",", '')),
+                "Quarantine": int(b.replace(",", '')),
+                "Death": int(c.replace(",", '')),
+                "SubTotal": int(d.replace(",", '')),
             },
-            "NegativeResult": await cleanText(await self.loop.run_in_threadpool(lambda: NegativeResult.getall()[0])+"명"),
-            "InspectionCompleted": await cleanText(await self.loop.run_in_threadpool(lambda: InspectionCompleted.getall()[0])+"명"),
-            "UnderInspection": await cleanText(await self.loop.run_in_threadpool(lambda: UnderInspection.getall()[0])+"명"),
-            "Total": await cleanText(await self.loop.run_in_threadpool(lambda: Total.getall()[0])+"명")
+            "NegativeResult": int(e.replace(",", '')),
+            "InspectionCompleted": int(f.replace(",", '')),
+            "UnderInspection": int(g.replace(",", '')),
+            "Total": int(h.replace(",", ''))
         }
         return jsondata
 

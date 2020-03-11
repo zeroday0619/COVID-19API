@@ -45,12 +45,12 @@ config = AppSettings()
 
 
 
-@app.get("/")
+@app.get("/", tags=['v2'])
 async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	return RedirectResponse('/docs')
 
 
-@app.get("/kr/status", tags=['국내 COVID-19 현황 조회'])
+@app.get("/kr/status")
 async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""# 국내 COVID-19 현황
 	## 대한민국 질병관리본부 
@@ -62,7 +62,7 @@ async def covidInfo(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depend
 	return Result
 
 
-@app.get("/kr/status/region", tags=['시도별 COVID-19 현황 조회'])
+@app.get("/kr/status/region")
 async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""# 지역 별 COVID-19 현황 조회
 	## 대한민국 질병관리본부 
@@ -73,7 +73,7 @@ async def covidIDR(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends
 	return Result
 
 
-@app.get("/kr/status/region/{location}", tags=['시도별 COVID-19 선택 현황 조회'])
+@app.get("/kr/status/region/{location}")
 async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""# 시도별 COVID-19 선택 현황 조회
 	## location
@@ -94,21 +94,21 @@ async def ClassificationCOVID19(location: str, cache: aioredis.Redis=fastapi.Dep
 	Result = await loc(location=location, data=data, loop=loop, cache=cache)
 	return Result
 
-@app.get("/kr/status/inspection", tags=['국내 검사 현황 | 누적 확진률 조회'])
+@app.get("/kr/status/inspection")
 async def CumulativeInspection(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""## 국내 검사 현황 | 누적 확진률"""
 	loop = Performance()
 	Result = await KrCumulativeInspection(loop=loop, cache=cache)
 	return Result
 
-@app.get("/kr/status/inspection/detail", tags=['국내 검사 현황 상세 조회'])
+@app.get("/kr/status/inspection/detail")
 async def _InspectionDetail(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""## 국내 검사 현황 상세 조회"""
 	loop = Performance()
 	Result = await InspectionDetail(cache=cache, loop=loop)
 	return Result
 
-@app.get("/kr/news", tags=["COVID-19 관련 뉴스 API"])
+@app.get("/kr/news")
 async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	"""## 국내 코로나 관련 뉴스를 제공.
 		10분 간격으로 news 정보 업데이트 됩니다.
