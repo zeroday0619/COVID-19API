@@ -38,7 +38,7 @@ class AppSettings(OtherSettings, fastapi_plugins.RedisSettings):
 app = FastAPI(
 	title="COVID-19 API",
 	description="## 코로나 바이러스 감염증 -19 (COVID-19)의 국내 현황/뉴스 제공 API \n\n ### Project Repo: [Github](https://github.com/zeroday0619/COVID-19API)",
-	version="2020.03.12 B2",
+	version="2020.03.12 B3",
 	debug=False
 )
 config = AppSettings()

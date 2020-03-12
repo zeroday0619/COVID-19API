@@ -27,34 +27,64 @@ class InfectiousDiseases:
     
     async def Convert(self):
         data = await self.data.GetInfectiousDiseases2()
+        _data = await self.data.GetInfectiousDiseases4()
         soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
-        aPatient = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[1]"))
-        aQuarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[2]"))
-        aInIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[3]"))
-        aDeath = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[4]"))
+        _soup = await self.loop.run_in_threadpool(lambda: Selector(text=_data))
+
+        aPatient = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[1]")) # 확진 환자
+        aQuarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[2]")) # 격리중
+        aInIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[3]")) # 격리 해제
+        aDeath = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[4]")) # 사망
+
+        # The day before
+        aBeforePatient = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(1) > span.before")) # 확진 환자
+        aBeforeQuarantine = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(3) > span.before")) # 격리중
+        aBeforeInIsolation = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(2) > span.before")) # 격리 해제
+        aBeforeDeath = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(4) > span.before")) # 사망
 
         _Patient = await self.loop.run_in_threadpool(lambda: aPatient.getall()[0])
         _Quarantine = await self.loop.run_in_threadpool(lambda: aQuarantine.getall()[0])
         _InIsolation = await self.loop.run_in_threadpool(lambda: aInIsolation.getall()[0])
         _death = await self.loop.run_in_threadpool(lambda: aDeath.getall()[0])
 
+        # The day before
+        sBeforePatient = await self.loop.run_in_threadpool(lambda: aBeforePatient.getall()[0]) # 확진 환자
+        sBeforeQuarantine = await self.loop.run_in_threadpool(lambda: aBeforeQuarantine.getall()[0]) # 격리 중
+        sBeforeInIsolation = await self.loop.run_in_threadpool(lambda: aBeforeInIsolation.getall()[0]) #격리 해제
+        sBeforeDeath = await self.loop.run_in_threadpool(lambda: aBeforeDeath.getall()[0]) # 사망
+
         Patient_ = await cleanText(_Patient)
         Quarantine_ = await cleanText(_Quarantine)
         InIsolation_ = await cleanText(_InIsolation)
         death_ = await cleanText(_death)
 
+        # The day before
+        dBeforePatient = await cleanText(sBeforePatient) # 확진 환자
+        dBeforeQuarantine = await cleanText(sBeforeQuarantine) # 격리 중
+        dBeforeInIsolation = await cleanText(sBeforeInIsolation) # 격리 해제
+        dBeforeDeath = await cleanText(sBeforeDeath) # 사망
+
+
         Patient = await StringToInteger(string=Patient_)
         Quarantine = await StringToInteger(string=Quarantine_)
         InIsolation = await StringToInteger(string=InIsolation_)
         death = await StringToInteger(string=death_)
+        # The day before
+        BeforePatient = await StringToInteger(string=dBeforePatient) # 전일대비 확진 환자
+        BeforeQuarantine = await StringToInteger(string=dBeforeQuarantine) # 전일대비 격리 중
+        BefroeInIsolation = await StringToInteger(string=dBeforeInIsolation) # 전일대비 격리 해제
+        BefroeDeath = await StringToInteger(string=dBeforeDeath) # 전일대비 사망
 
         result = {
             "patient": Patient,
+            "before_patient": BeforePatient,
             "quarantine": Quarantine,
+            "before_quarantine": BeforeQuarantine,
             "inisolation": InIsolation,
-            "death": death
+            "before_inisolation": BefroeInIsolation,
+            "death": death,
+            "before_death": BefroeDeath
         }
-        
         return result
     async def InspectionStatusDetail(self):
         """대한민국 COVID-19 검사 - Detail

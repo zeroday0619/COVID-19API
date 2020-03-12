@@ -18,6 +18,7 @@ class kcdcAPI:
         self.loop = Performance()
         # 질병관리본부 COVID-19 URL
         self.url = "http://ncov.mohw.go.kr/bdBoardList_Real.do"
+        self.MainUrl = "http://ncov.mohw.go.kr/"
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Linux; Android 10.0.0; SM-F700NZPAKOO) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.101 Mobile Safari/537.36"
         }
@@ -38,10 +39,16 @@ class kcdcAPI:
             async with session.get(url=self.url, params=self.payload) as resp:
                 info = await resp.text()
         return info
-        
+
     async def GetInfectiousDiseases3(self):
         """국내 감염증 정보 파싱"""
         async with aiohttp.ClientSession(headers=self.headers) as session:
             async with session.get(url=self.url, params=self.payload) as resp:
+                info = await resp.text()
+        return info
+
+    async def GetInfectiousDiseases4(self):
+        async with aiohttp.ClientSession(headers=self.headers) as session:
+            async with session.get(url=self.MainUrl) as resp:
                 info = await resp.text()
         return info

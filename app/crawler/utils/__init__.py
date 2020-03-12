@@ -18,10 +18,9 @@ async def StringToInteger(string):
     Only String To Integer
     """
     loop = Performance()
-    __Integer = await loop.run_in_threadpool(lambda: string.replace(",", ''))
+    __Integer = await loop.run_in_threadpool(lambda: string.replace(",", '').replace("(", '').replace(")", '').replace(",", '').replace(" ", '').replace("전일대비", '').strip())
     converted = int(__Integer)
     return converted
-    
 
 async def JsonData(listdata):
     jsondata = [
