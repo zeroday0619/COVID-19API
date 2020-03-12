@@ -2,8 +2,8 @@ from ..crawler.mohw import InfectiousDiseases
 import ujson
 
 async def krstatus(cache, loop):
-	if await cache.exists('krstatus'):
-		data = InfectiousDiseases()
+	if not await cache.exists('krstatus'):
+		data = InfectiousDiseases(mode=11)
 		Result = await data.Convert()
 		rs = {
 			'krstatus': Result

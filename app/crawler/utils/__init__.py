@@ -13,6 +13,16 @@ async def cleanText(text):
     cleanT = await loop.run_in_threadpool(lambda: re.sub("<.+?>", "", str(text), 0, re.I|re.S))
     return cleanT
 
+async def StringToInteger(string):
+    """StringToInteger는 float Type은 처리 할 수 없습니다.\n
+    Only String To Integer
+    """
+    loop = Performance()
+    __Integer = await loop.run_in_threadpool(lambda: string.replace(",", ''))
+    converted = int(__Integer)
+    return converted
+    
+
 async def JsonData(listdata):
     jsondata = [
             {"SEOUL":{"increase": float(listdata[5]),"patient": float(listdata[6]),"death": float(listdata[7]),"ratio": float(listdata[8]),"inspection": float(listdata[9])}},

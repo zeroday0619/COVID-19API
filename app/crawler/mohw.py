@@ -9,6 +9,7 @@ from scrapy.selector import Selector
 from .utils import KcdcApi
 from ..ext.Performance import Performance
 from .utils import cleanText
+from .utils import StringToInteger
 from .utils import JsonData
 from ..ext import route
 
@@ -24,68 +25,37 @@ class InfectiousDiseases:
         self.data = KcdcApi(mode=mode)
         self.loop = Performance()
     
-    async def Convert(self) -> dict:
-        """
-        :return: json
-        """
+    async def Convert(self):
         data = await self.data.GetInfectiousDiseases2()
         soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
+        aPatient = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[1]"))
+        aQuarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[2]"))
+        aInIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[3]"))
+        aDeath = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[4]"))
 
-        patient = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[1]/span[1]"))
-        patientrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[1]/span[2]"))
+        _Patient = await self.loop.run_in_threadpool(lambda: aPatient.getall()[0])
+        _Quarantine = await self.loop.run_in_threadpool(lambda: aQuarantine.getall()[0])
+        _InIsolation = await self.loop.run_in_threadpool(lambda: aInIsolation.getall()[0])
+        _death = await self.loop.run_in_threadpool(lambda: aDeath.getall()[0])
+
+        Patient_ = await cleanText(_Patient)
+        Quarantine_ = await cleanText(_Quarantine)
+        InIsolation_ = await cleanText(_InIsolation)
+        death_ = await cleanText(_death)
+
+        Patient = await StringToInteger(string=Patient_)
+        Quarantine = await StringToInteger(string=Quarantine_)
+        InIsolation = await StringToInteger(string=InIsolation_)
+        death = await StringToInteger(string=death_)
+
+        result = {
+            "patient": Patient,
+            "quarantine": Quarantine,
+            "inisolation": InIsolation,
+            "death": death
+        }
         
-        isolation = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[2]/span[1]"))
-        isolationrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[2]/span[2]"))
-
-        inisolation = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[3]/span[1]"))
-        inisolationrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[3]/span[2]"))
-
-        death = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[4]/span[1]"))
-        deathrate = await self.loop.run_in_threadpool(lambda: soup.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[1]/ul/li[4]/span[2]"))
-
-        _patient = await self.loop.run_in_threadpool(lambda: patient.getall())
-        _patientrate = await self.loop.run_in_threadpool(lambda: patientrate.getall())
-
-        _isolation = await self.loop.run_in_threadpool(lambda: isolation.getall())
-        _isolationrate = await self.loop.run_in_threadpool(lambda: isolationrate.getall())
-
-        _inisolation = await self.loop.run_in_threadpool(lambda: inisolation.getall())
-        _inisolationrate = await self.loop.run_in_threadpool(lambda: inisolationrate.getall())
-
-        _death = await self.loop.run_in_threadpool(lambda: death.getall())
-        _deathrate = await self.loop.run_in_threadpool(lambda: deathrate.getall())        
-
-        a = await cleanText(_patient[0])
-        b = await cleanText(_patientrate[0])
-
-        c = await cleanText(_isolation[0])
-        d = await cleanText(_isolationrate[0])
-        
-        _a = await cleanText(_inisolation[0])
-        _b = await cleanText(_inisolationrate[0])
-        
-        _c = await cleanText(_death[0])
-        _d = await cleanText(_deathrate[0])
-
-        JsonData = [
-            {
-                "patient": int(a.replace("(누적)", "").strip().replace(",", '')),
-                "compared": int(b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
-            },
-            {
-                "isolation": int(c.replace(",", '')),
-                "compared": int(d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
-            },
-            {
-                "in_isolation": int(_a.replace(",", '')),
-                "compared": int(_b.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
-            },
-            {
-                "death": int(_c.replace(",", '')),
-                "compared": int(_d.replace("전일대비", "").replace("(", "").replace(")", "").replace(" ","").strip().replace(",", ''))
-            }
-        ]
-        return JsonData
+        return result
     async def InspectionStatusDetail(self):
         """대한민국 COVID-19 검사 - Detail
         - InIsolation: 격리중
