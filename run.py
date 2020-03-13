@@ -44,7 +44,6 @@ app = FastAPI(
 config = AppSettings()
 
 
-
 @app.get("/")
 async def RootGet(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
 	return RedirectResponse('/docs')

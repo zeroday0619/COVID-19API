@@ -2,6 +2,7 @@ fastapi[all]
 aiohttp[speedup]
 bs4[speedup]
 fastapi_plugins
+pyppeteer
 scrapy
 aioredis
 ujson
