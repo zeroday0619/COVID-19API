@@ -1,17 +1,53 @@
+"""
+코드 참조
+https://github.com/KKodiac/Covid19_Stats/blob/master/Covid-19/covid19_wd.py
+"""
 import asyncio
 import aiohttp
-from pyppeteer import launch
+import ujson
 from ...ext.Performance import Performance
+
 class CSSEParser:
     def __init__(self):
-        self.loop = Performance()
-        self.globalMapUrl = "https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36 Edg/80.0.361.66"
+            "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0"
         }
-        self.Config = {'headless': True}
-    async def HeadlessCrawler(self):
-        browser = await launch(options=self.Config)
-        page = await browser.newPage()
-        await page.goto(url=self.globalMapUrl)
+        self.loop = Performance()
+
+    async def Processing(self):
+        serviceLinks = "https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/2/query"
+        query_syn = {
+            "f": "json",
+            "where": "Confirmed>0",
+            "outFields": "*",
+            "orderByFields": "OBJECTID"
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url=serviceLinks, params=query_syn) as resp:
+                jtext = await resp.text()
+        return jtext
+    
+    async def _return_wd_dat(self):
+        data = await self.Processing()
+        dumped = ujson.loads(data)
+        da = dumped["features"]
+        sa = []
+        for row in da:
+            result = {
+                "country": row['attributes']['Country_Region'],
+                "state":{
+                    "patient": row['attributes']['Confirmed'],
+                    "recovered": row['attributes']['Recovered'],
+                    "death": row['attributes']['Deaths']
+                }
+            }
+            yield result
+    
+    async def return_wd_dat(self):
+        sa = []
+        async for i in self._return_wd_dat():
+            sa.append(i)
+        return sa
+
+
         

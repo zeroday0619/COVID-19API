@@ -21,6 +21,7 @@ from app.ext.krstatus import InspectionDetail
 from app.ext.krstatus import krstatus
 from app.ext.KrNews import KrNews
 from app.ext.location import loc
+from app.crawler.csse import CSSEApi
 
 
 
@@ -116,6 +117,28 @@ async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.dep
 	loop = Performance()
 	Result = await KrNews(cache=cache, loop=loop)
 	return Result
+
+@app.get("/global/status")
+async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.depends_redis),) -> typing.Dict:
+	"""
+	## 국가별 감염, 완치. 사망 정보 조회
+	"""
+	loop = Performance()
+	if not await cache.exists('global'):
+		ads = CSSEApi()
+		data = await ads.apiProcess()
+		global_ = {
+			"global": data
+		}
+		_global = await loop.run_in_threadpool(lambda: ujson.dumps(global_, ensure_ascii=False, escape_forward_slashes=False).encode('utf-8'))
+		await cache.set('global', _global, expire=3600)
+		return global_
+	else:
+		global_ = await cache.get('global')
+		_global = await loop.run_in_threadpool(lambda: ujson.loads(global_))
+		return _global
+
+
 
 @app.on_event('startup')
 async def on_startup() -> None:
