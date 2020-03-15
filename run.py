@@ -9,19 +9,22 @@ import ujson
 import pydantic
 import aioredis
 import fastapi_plugins
-from fastapi import FastAPI, HTTPException
+
 from pydantic import BaseModel
-from starlette.responses import RedirectResponse, Response
+from fastapi import FastAPI, HTTPException
+from starlette.responses import RedirectResponse
+from starlette.responses import Response
+from datetime import datetime, timedelta
+from app.ext.Performance import Performance
 from app.crawler.mohw import GetInfectiousDiseasesbyRegion
 from app.ext.KrCumulative import KrCumulativeInspection
 from app.ext.KrStatusRegion import KrStatusRegion
-from app.ext.Performance import Performance
-from datetime import datetime, timedelta
 from app.ext.krstatus import InspectionDetail
 from app.ext.krstatus import krstatus
+from app.ext.globalStatus import globalStatus
 from app.ext.KrNews import KrNews
 from app.ext.location import loc
-from app.crawler.csse import CSSEApi
+
 
 
 
@@ -124,21 +127,8 @@ async def KrCoronaNews(cache: aioredis.Redis=fastapi.Depends(fastapi_plugins.dep
 	## 국가별 감염, 완치. 사망 정보 조회
 	"""
 	loop = Performance()
-	if not await cache.exists('global'):
-		ads = CSSEApi()
-		data = await ads.apiProcess()
-		global_ = {
-			"global": data
-		}
-		_global = await loop.run_in_threadpool(lambda: ujson.dumps(global_, ensure_ascii=False, escape_forward_slashes=False).encode('utf-8'))
-		await cache.set('global', _global, expire=3600)
-		return global_
-	else:
-		global_ = await cache.get('global')
-		_global = await loop.run_in_threadpool(lambda: ujson.loads(global_))
-		return _global
-
-
+	data = await globalStatus(cache=cache, loop=loop)
+	return data
 
 @app.on_event('startup')
 async def on_startup() -> None:
