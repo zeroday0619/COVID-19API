@@ -51,19 +51,19 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 ### - API Documentation
 
-- 국내 COVID-19 현황 조회 -  /kr/status
 
-- 지역 별 COVID-19 현황 조회 - /kr/status/region
+- South Korea COVID-19 Status Inquiry - /kr/status
+- Status of COVID-19 by South Korean cities - /kr/status/region
 
-- 지역 별 COVID-19 선택 현황 조회 - /kr/status/region/{location}
+- COVID-19 status selection search by city - /kr/status/region/{location}
 
-- 국내 COVID-19 검사 현황 | 누적 확진률 조회 - /kr/status/inspection
+- South Korea COVID-19 Inspection Status | Cumulative Confirmation - /kr/status/inspection
 
-- 국내 COVID-19 검사 현황 상세 조회 - /kr/status/inspection/detail
+- South Korea COVID-19 inspection details - /kr/status/inspection/detail
 
-- 해외 COVID-19 감염, 완치, 사망 정보 조회 - /global/status
+- Search for worldwide COVID-19 infection, cure and death information - /global/status
 
-- 국내 COVID-19 관련 뉴스 제공 - /kr/news
+- News on South Korea's COVID-19 - /kr/news
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
 
