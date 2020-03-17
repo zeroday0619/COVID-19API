@@ -1,5 +1,6 @@
 import ujson
 from fastapi import HTTPException
+
     
 async def loc(location, data, loop, cache):
 	if location == 'seoul':

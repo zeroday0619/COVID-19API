@@ -165,8 +165,6 @@ class GetInfectiousDiseasesbyRegion:
     
     async def Classification(self, regionNumber: int):
         data = GetInfectiousDiseasesbyRegion()
-        rt = await data.AllRegion()
+        rt = await asyncio.gather(data.AllRegion())
         jsondata = await route(data=rt, regionNumber=regionNumber)
         return jsondata
-
-

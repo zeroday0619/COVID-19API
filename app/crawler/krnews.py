@@ -39,6 +39,6 @@ class KrNewsParser:
         summary = []
         for i in _summary:
             ___summary = await cleanText(i)
-            summary.append(___summary)       
-        jsondata = await NewsNogadaJsonData(a=title, b=press, c=summary, d=link)
+            summary.append(___summary)
+        jsondata = await asyncio.gather(NewsNogadaJsonData(a=title, b=press, c=summary, d=link))
         return jsondata
