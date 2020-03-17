@@ -22,7 +22,7 @@ async def loc(location, data, loop, cache):
 		else:
 			busan = await cache.get('busan', encoding='utf-8')
 			_busan = await loop.run_in_threadpool(lambda: ujson.loads(busan))
-			return _seoul
+			return _busan
 	elif location == 'daegu':
 		if not await cache.exists('daegu'):
 			daegu = await data.Classification(regionNumber=2)
