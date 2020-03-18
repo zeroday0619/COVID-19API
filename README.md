@@ -63,6 +63,8 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 - Search for worldwide COVID-19 infection, cure and death information - /v1/global/status
 
+- Europe COVID-19 Status Inquiry - /v1/euro/status
+
 - News on South Korea's COVID-19 - /v1/kr/news
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
