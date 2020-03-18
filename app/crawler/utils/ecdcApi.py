@@ -1,10 +1,11 @@
 from app.ext.utils.Performance import Performance
-from . import cleanText
 from scrapy.selector import Selector
+from . import cleanText
 import aiohttp
 
 
 class Ecdc:
+    """유럽 COVID-19 현황 크롤러"""
     def __init__(self):
         self.loop = Performance()
         self.url = "https://www.ecdc.europa.eu/en/cases-2019-ncov-eueea"
@@ -18,15 +19,17 @@ class Ecdc:
         return HTML
 
     async def Crawler(self):
+        """Crawler"""
         source = await self.Request()
         soup = await self.loop.run_in_threadpool(lambda: Selector(text=source))
         layer = await self.loop.run_in_threadpool(lambda: soup.xpath(self.xpath))
         result = await self.loop.run_in_threadpool(lambda: layer.getall())
         return result
 
-    async def ConvertList(self):
+    async def ConvertList(self) -> list:
+        """Convert list"""
         source = await self.Crawler()
         ListA = []
         for item in source:
-            ListA.append(cleanText(item))
+            ListA.append(await cleanText(item))
         return ListA

@@ -3,16 +3,10 @@
 :contact: zeroday0619(at)kakao.com
 :copyright: Copyright 2020, zeroday0619
 """
-import fastapi
-import typing
 import pydantic
-import aioredis
 import fastapi_plugins
 from fastapi import FastAPI
 from API.v1 import router
-from starlette.responses import RedirectResponse
-
-
 __author__ = 'zeroday0619 <zeroday0619(at)kakao.com>'
 __copyright__ = 'Copyright 2020, zeroday0619/Euiseo Cha'
 
@@ -33,6 +27,7 @@ app = FastAPI(
     debug=True
 )
 config = AppSettings()
+
 
 @app.on_event('startup')
 async def on_startup() -> None:

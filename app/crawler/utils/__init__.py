@@ -12,6 +12,8 @@ async def cleanText(text):
     cleanT = await loop.run_in_threadpool(lambda: re.sub("<.+?>", "", str(text), 0, re.I|re.S))
     return cleanT
 
+def chunker(seq, size=3):
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
 async def StringToInteger(string):
     """StringToInteger는 float Type은 처리 할 수 없습니다.\n
@@ -45,6 +47,42 @@ async def JsonData(listdata):
     ]
     return jsondata
 
+async def EuroJsonData(listdata):
+    euroJsonData = [
+        {listdata[0]: {"Cases": int(listdata[1]), "Deaths": int(listdata[2])}},
+        {listdata[3]: {"Cases": int(listdata[4]), "Deaths": int(listdata[5])}},
+        {listdata[6]: {"Cases": int(listdata[7]), "Deaths": int(listdata[8])}},
+        {listdata[9]: {"Cases": int(listdata[10]), "Deaths": int(listdata[11])}},
+        {listdata[12]: {"Cases": int(listdata[13]), "Deaths": int(listdata[14])}},
+        {listdata[15]: {"Cases": int(listdata[16]), "Deaths": int(listdata[17])}},
+        {listdata[18]: {"Cases": int(listdata[19]), "Deaths": int(listdata[20])}},
+        {listdata[21]: {"Cases": int(listdata[22]), "Deaths": int(listdata[23])}},
+        {listdata[24]: {"Cases": int(listdata[25]), "Deaths": int(listdata[26])}},
+        {listdata[27]: {"Cases": int(listdata[28]), "Deaths": int(listdata[29])}},
+        {listdata[30]: {"Cases": int(listdata[31]), "Deaths": int(listdata[32])}},
+        {listdata[33]: {"Cases": int(listdata[34]), "Deaths": int(listdata[35])}},
+        {listdata[36]: {"Cases": int(listdata[37]), "Deaths": int(listdata[38])}},
+        {listdata[39]: {"Cases": int(listdata[40]), "Deaths": int(listdata[41])}},
+        {listdata[42]: {"Cases": int(listdata[43]), "Deaths": int(listdata[44])}},
+        {listdata[45]: {"Cases": int(listdata[46]), "Deaths": int(listdata[47])}},
+        {listdata[48]: {"Cases": int(listdata[49]), "Deaths": int(listdata[50])}},
+        {listdata[51]: {"Cases": int(listdata[52]), "Deaths": int(listdata[53])}},
+        {listdata[54]: {"Cases": int(listdata[55]), "Deaths": int(listdata[56])}},
+        {listdata[57]: {"Cases": int(listdata[58]), "Deaths": int(listdata[59])}},
+        {listdata[60]: {"Cases": int(listdata[61]), "Deaths": int(listdata[62])}},
+        {listdata[63]: {"Cases": int(listdata[64]), "Deaths": int(listdata[65])}},
+        {listdata[66]: {"Cases": int(listdata[67]), "Deaths": int(listdata[68])}},
+        {listdata[69]: {"Cases": int(listdata[70]), "Deaths": int(listdata[71])}},
+        {listdata[72]: {"Cases": int(listdata[73]), "Deaths": int(listdata[74])}},
+        {listdata[75]: {"Cases": int(listdata[76]), "Deaths": int(listdata[77])}},
+        {listdata[78]: {"Cases": int(listdata[79]), "Deaths": int(listdata[80])}},
+        {listdata[81]: {"Cases": int(listdata[82]), "Deaths": int(listdata[83])}},
+        {listdata[84]: {"Cases": int(listdata[85]), "Deaths": int(listdata[86])}},
+        {listdata[87]: {"Cases": int(listdata[88]), "Deaths": int(listdata[89])}},
+        {listdata[90]: {"Cases": int(listdata[91]), "Deaths": int(listdata[92])}},
+        {listdata[93]: {"Cases": int(listdata[94]), "Deaths": int(listdata[95])}}
+    ]
+    return euroJsonData
 
 async def NewsNogadaJsonData(a, b, c, d):
     """노가다"""
@@ -112,3 +150,4 @@ async def NewsNogadaJsonData(a, b, c, d):
         }
     ]
     return jsondata
+

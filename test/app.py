@@ -25,7 +25,6 @@ def res():
     ListB = []
     for i in db:
         ListA.append(cleanText(i))
-    for index in chunker(ListA):
-        ListB.append(index)
-    return ListB
-print(res())
+
+    return ListA
+print(res()[0])

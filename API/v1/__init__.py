@@ -8,10 +8,13 @@ from app.ext.route.location import loc
 from app.ext.route.krstatus import krstatus
 from app.ext.route.KrNews import KrNews
 from app.ext.route.globalStatus import globalStatus
+from app.crawler.euro import Euro
+from app.ext.route.euroStatus import euroStatus
 import fastapi_plugins
 import aioredis
 import fastapi
 import typing
+import ujson
 
 
 router = APIRouter()
@@ -97,3 +100,11 @@ async def KrCoronaNews(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.d
     loop = Performance()
     data = await globalStatus(cache=cache, loop=loop)
     return data
+
+@router.get("/euro/status")
+async def EuroCovid(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    """유럽 COVID-19 현황 조회"""
+    loop = Performance()
+    da = Euro()
+    sb = await euroStatus(loop=loop, cache=cache, db=da)
+    return sb
