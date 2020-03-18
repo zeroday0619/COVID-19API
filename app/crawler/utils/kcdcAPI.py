@@ -1,9 +1,5 @@
 import aiohttp
-import asyncio
-import lxml
-import re
-
-from ...ext.Performance import Performance
+from app.ext.utils.Performance import Performance
 from bs4 import BeautifulSoup
 
 

@@ -1,6 +1,5 @@
+from app.ext.utils.Performance import Performance
 from .kcdcAPI import kcdcAPI
-from .kcdcAPI import Performance
-import asyncio
 import re
 
 
@@ -13,6 +12,7 @@ async def cleanText(text):
     cleanT = await loop.run_in_threadpool(lambda: re.sub("<.+?>", "", str(text), 0, re.I|re.S))
     return cleanT
 
+
 async def StringToInteger(string):
     """StringToInteger는 float Type은 처리 할 수 없습니다.\n
     Only String To Integer
@@ -21,6 +21,7 @@ async def StringToInteger(string):
     __Integer = await loop.run_in_threadpool(lambda: string.replace(",", '').replace("(", '').replace(")", '').replace(",", '').replace(" ", '').replace("전일대비", '').strip())
     converted = int(__Integer)
     return converted
+
 
 async def JsonData(listdata):
     jsondata = [
@@ -43,6 +44,7 @@ async def JsonData(listdata):
             {"JEJU":{"increase": float(listdata[85]),"patient": float(listdata[86]),"death": float(listdata[87]),"ratio": float(listdata[88]),"inspection": float(listdata[89])}}
     ]
     return jsondata
+
 
 async def NewsNogadaJsonData(a, b, c, d):
     """노가다"""

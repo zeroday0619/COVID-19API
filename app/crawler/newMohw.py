@@ -1,12 +1,8 @@
-import asyncio
-import scrapy
-import ujson
-
-from scrapy.crawler import CrawlerRunner
 from scrapy.selector import Selector
-from ..ext.Performance import Performance
+from app.ext.utils.Performance import Performance
 from .utils.kcdcAPI_V2 import KcdcApiV2
 from .utils import cleanText
+
 
 class Paser:
     """대한민국 질병관리본부 COVID-19 국내 현황 데이터 처리\n
@@ -42,6 +38,3 @@ class Paser:
             "description": il[6]
         }
         return jsondata
-
-
-        

@@ -1,5 +1,6 @@
 from .utils.csseAPI import CSSEParser
-import ujson
+
+
 class CSSEApi:
     def __init__(self):
         self.data = CSSEParser()

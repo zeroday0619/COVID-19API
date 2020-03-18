@@ -52,18 +52,18 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 ### - API Documentation
 
 
-- South Korea COVID-19 Status Inquiry - /kr/status
-- Status of COVID-19 by South Korean cities - /kr/status/region
+- South Korea COVID-19 Status Inquiry - /v1/kr/status
+- Status of COVID-19 by South Korean cities - /v1/kr/status/region
 
-- COVID-19 status selection search by city - /kr/status/region/{location}
+- COVID-19 status selection search by city - /v1/kr/status/region/{location}
 
-- South Korea COVID-19 Inspection Status | Cumulative Confirmation - /kr/status/inspection
+- South Korea COVID-19 Inspection Status | Cumulative Confirmation - /v1/kr/status/inspection
 
-- South Korea COVID-19 inspection details - /kr/status/inspection/detail
+- South Korea COVID-19 inspection details - /v1/kr/status/inspection/detail
 
-- Search for worldwide COVID-19 infection, cure and death information - /global/status
+- Search for worldwide COVID-19 infection, cure and death information - /v1/global/status
 
-- News on South Korea's COVID-19 - /kr/news
+- News on South Korea's COVID-19 - /v1/kr/news
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
 
@@ -72,17 +72,11 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 ```python
 import requests
 import json
-url = "https://ncov.zeroday0619.kr/kr/status"
+url = "https://ncov.zeroday0619.kr/v1/kr/status"
 resp = requests.get(url).json()
 result = resp['krstatus']
 print(result)
 ```
-
-## Extreme optimization
-    - Use FastAPI framework
-    - Cache: Redis
-    - asynchronous
-![TTFB 15.66ms](/src/img/TTFB.png)
 
 ## License
 

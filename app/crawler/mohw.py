@@ -1,17 +1,10 @@
-import asyncio
-import aiohttp
-import ujson
-import lxml
-import re
-
-from bs4 import BeautifulSoup
 from scrapy.selector import Selector
 from .utils import KcdcApi
-from ..ext.Performance import Performance
+from app.ext.utils.Performance import Performance
 from .utils import cleanText
 from .utils import StringToInteger
 from .utils import JsonData
-from ..ext import route
+from app.ext.utils.route import route
 
 
 class InfectiousDiseases:
@@ -22,8 +15,8 @@ class InfectiousDiseases:
     - Inspection
     """
     def __init__(self, mode=11):
-        self.data = KcdcApi(mode=mode)
         self.loop = Performance()
+        self.data = KcdcApi(mode=mode)
     
     async def Convert(self):
         data = await self.data.GetInfectiousDiseases2()
@@ -64,7 +57,6 @@ class InfectiousDiseases:
         dBeforeInIsolation = await cleanText(sBeforeInIsolation) # 격리 해제
         dBeforeDeath = await cleanText(sBeforeDeath) # 사망
 
-
         Patient = await StringToInteger(string=Patient_)
         Quarantine = await StringToInteger(string=Quarantine_)
         InIsolation = await StringToInteger(string=InIsolation_)
@@ -86,6 +78,7 @@ class InfectiousDiseases:
             "before_death": BefroeDeath
         }
         return result
+
     async def InspectionStatusDetail(self):
         """대한민국 COVID-19 검사 - Detail
         - InIsolation: 격리중

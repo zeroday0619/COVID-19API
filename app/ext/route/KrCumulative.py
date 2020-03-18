@@ -1,5 +1,5 @@
 import ujson
-from ..crawler.newMohw import Paser
+from app.crawler.newMohw import Paser
 
 
 async def KrCumulativeInspection(loop, cache):

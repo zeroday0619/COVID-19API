@@ -1,5 +1,5 @@
 import ujson
-from ..crawler.csse import CSSEApi
+from app.crawler.csse import CSSEApi
 
 
 async def globalStatus(cache, loop):

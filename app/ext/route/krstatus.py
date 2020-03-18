@@ -1,4 +1,4 @@
-from ..crawler.mohw import InfectiousDiseases
+from app.crawler.mohw import InfectiousDiseases
 import ujson
 
 

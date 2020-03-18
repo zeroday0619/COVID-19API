@@ -1,8 +1,4 @@
-import asyncio
 import aiohttp
-
-from concurrent.futures import ThreadPoolExecutor
-from ...ext.Performance import Performance
 
 
 class KcdcApiV2:
