@@ -49,41 +49,42 @@ async def JsonData(listdata):
 
 
 async def EuroJsonData(listdata):
-    euroJsonData = [
-        {"country": listdata[0], "cases": int(listdata[1]), "deaths": int(listdata[2])},
-        {"country": listdata[3], "cases": int(listdata[4]), "deaths": int(listdata[5])},
-        {"country": listdata[6], "cases": int(listdata[7]), "deaths": int(listdata[8])},
-        {"country": listdata[9], "cases": int(listdata[10]), "deaths": int(listdata[11])},
-        {"country": listdata[12], "cases": int(listdata[13]), "deaths": int(listdata[14])},
-        {"country": listdata[15], "cases": int(listdata[16]), "deaths": int(listdata[17])},
-        {"country": listdata[18], "cases": int(listdata[19]), "deaths": int(listdata[20])},
-        {"country": listdata[21], "cases": int(listdata[22]), "deaths": int(listdata[23])},
-        {"country": listdata[24], "cases": int(listdata[25]), "deaths": int(listdata[26])},
-        {"country": listdata[27], "cases": int(listdata[28]), "deaths": int(listdata[29])},
-        {"country": listdata[30], "cases": int(listdata[31]), "deaths": int(listdata[32])},
-        {"country": listdata[33], "cases": int(listdata[34]), "deaths": int(listdata[35])},
-        {"country": listdata[36], "cases": int(listdata[37]), "deaths": int(listdata[38])},
-        {"country": listdata[39], "cases": int(listdata[40]), "deaths": int(listdata[41])},
-        {"country": listdata[42], "cases": int(listdata[43]), "deaths": int(listdata[44])},
-        {"country": listdata[45], "cases": int(listdata[46]), "deaths": int(listdata[47])},
-        {"country": listdata[48], "cases": int(listdata[49]), "deaths": int(listdata[50])},
-        {"country": listdata[51], "cases": int(listdata[52]), "deaths": int(listdata[53])},
-        {"country": listdata[54], "cases": int(listdata[55]), "deaths": int(listdata[56])},
-        {"country": listdata[57], "cases": int(listdata[58]), "deaths": int(listdata[59])},
-        {"country": listdata[60], "cases": int(listdata[61]), "deaths": int(listdata[62])},
-        {"country": listdata[63], "cases": int(listdata[64]), "deaths": int(listdata[65])},
-        {"country": listdata[66], "cases": int(listdata[67]), "deaths": int(listdata[68])},
-        {"country": listdata[69], "cases": int(listdata[70]), "deaths": int(listdata[71])},
-        {"country": listdata[72], "cases": int(listdata[73]), "deaths": int(listdata[74])},
-        {"country": listdata[75], "cases": int(listdata[76]), "deaths": int(listdata[77])},
-        {"country": listdata[78], "cases": int(listdata[79]), "deaths": int(listdata[80])},
-        {"country": listdata[81], "cases": int(listdata[82]), "deaths": int(listdata[83])},
-        {"country": listdata[84], "cases": int(listdata[85]), "deaths": int(listdata[86])},
-        {"country": listdata[87], "cases": int(listdata[88]), "deaths": int(listdata[89])},
-        {"country": listdata[90], "cases": int(listdata[91]), "deaths": int(listdata[92])},
-        {"country": listdata[93], "cases": int(listdata[94]), "deaths": int(listdata[95])}
-    ]
+    euroJsonData = {"result": [
+        {"country": "it", "cases": int(listdata[1]), "deaths": int(listdata[2])},
+        {"country": "es", "cases": int(listdata[4]), "deaths": int(listdata[5])},
+        {"country": "fr", "cases": int(listdata[7]), "deaths": int(listdata[8])},
+        {"country": "de", "cases": int(listdata[10]), "deaths": int(listdata[11])},
+        {"country": "gb", "cases": int(listdata[13]), "deaths": int(listdata[14])},
+        {"country": "nl", "cases": int(listdata[16]), "deaths": int(listdata[17])},
+        {"country": "at", "cases": int(listdata[19]), "deaths": int(listdata[20])},
+        {"country": "no", "cases": int(listdata[22]), "deaths": int(listdata[23])},
+        {"country": "be", "cases": int(listdata[25]), "deaths": int(listdata[26])},
+        {"country": "se", "cases": int(listdata[28]), "deaths": int(listdata[29])},
+        {"country": "dk", "cases": int(listdata[31]), "deaths": int(listdata[32])},
+        {"country": "pt", "cases": int(listdata[34]), "deaths": int(listdata[35])},
+        {"country": "cz", "cases": int(listdata[37]), "deaths": int(listdata[38])},
+        {"country": "gr", "cases": int(listdata[40]), "deaths": int(listdata[41])},
+        {"country": "fi", "cases": int(listdata[43]), "deaths": int(listdata[44])},
+        {"country": "ie", "cases": int(listdata[46]), "deaths": int(listdata[47])},
+        {"country": "si", "cases": int(listdata[49]), "deaths": int(listdata[50])},
+        {"country": "is", "cases": int(listdata[52]), "deaths": int(listdata[53])},
+        {"country": "pl", "cases": int(listdata[55]), "deaths": int(listdata[56])},
+        {"country": "ee", "cases": int(listdata[58]), "deaths": int(listdata[59])},
+        {"country": "ro", "cases": int(listdata[61]), "deaths": int(listdata[62])},
+        {"country": "lu", "cases": int(listdata[64]), "deaths": int(listdata[65])},
+        {"country": "sk", "cases": int(listdata[67]), "deaths": int(listdata[68])},
+        {"country": "bg", "cases": int(listdata[70]), "deaths": int(listdata[71])},
+        {"country": "hr", "cases": int(listdata[73]), "deaths": int(listdata[74])},
+        {"country": "lv", "cases": int(listdata[76]), "deaths": int(listdata[77])},
+        {"country": "hu", "cases": int(listdata[79]), "deaths": int(listdata[80])},
+        {"country": "cy", "cases": int(listdata[82]), "deaths": int(listdata[83])},
+        {"country": "mt", "cases": int(listdata[85]), "deaths": int(listdata[86])},
+        {"country": "lt", "cases": int(listdata[88]), "deaths": int(listdata[89])},
+        {"country": "li", "cases": int(listdata[91]), "deaths": int(listdata[92])}
+    ], "total": {"cases": int(listdata[94]), "deaths": int(listdata[95])}
+    }
     return euroJsonData
+
 
 async def NewsNogadaJsonData(a, b, c, d):
     """노가다"""
