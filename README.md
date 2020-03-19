@@ -11,6 +11,8 @@ COVID-19API는 대한민국 질병관리본부가 공개한 자료를 사용하�
 
 COVID-19API uses data published by the Korea Centers for Disease Control and Prevention, and Coronavirus COVID-19 (CSSE) at Johns Hopkins University (JHU) for overseas information.
 
+    + NAVER NEWS, KCDC, ECDC, Johns Hopkins University(CSSE) 
+
 ## Installation
 
 - Ubuntu
@@ -65,6 +67,8 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 - Europe COVID-19 Status Inquiry - /v1/euro/status
 
+- Europe COVID-19 Status by Country - ​/v1​/euro​/status​/region​/{select}
+
 - News on South Korea's COVID-19 - /v1/kr/news
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
@@ -80,8 +84,10 @@ result = resp['krstatus']
 print(result)
 ```
 
+
+
 ## License
-
 --> [**MIT License**](https://github.com/zeroday0619/COVID-19API/blob/master/LICENSE)
-
 **Copyright (c) 2020 zeroday0619/Euiseo Cha**
+- zeroday0619@kakao.com
+- EuiseoCha@zeroday0619.dev
