@@ -173,4 +173,4 @@ async def loc(location, data, loop, cache):
             _jeju = await loop.run_in_threadpool(lambda: ujson.loads(jeju))
             return _jeju
     else:
-        raise HTTPException(status=404, detail="Location not found")
+        raise HTTPException(status_code=404, detail="Location not found")

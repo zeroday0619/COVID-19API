@@ -10,7 +10,7 @@ async def KrStatusRegion(cache, loop):
             "region": result
         }
         ob = await loop.run_in_threadpool(lambda: ujson.dumps(jsondata).encode('utf-8'))
-        # await cache.set('idr', ob, expire=3600)
+        await cache.set('region', ob, expire=3600)
         return jsondata
     else:
         abc = await cache.get('region', encoding='utf-8')

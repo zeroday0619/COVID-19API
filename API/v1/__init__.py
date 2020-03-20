@@ -11,6 +11,8 @@ from app.ext.route.globalStatus import globalStatus
 from app.crawler.euro import Euro
 from app.ext.route.euroStatus import euroStatus
 from app.ext.route.euroStatus import euroSelectStatus
+from app.ext.route.globalStatus import GlobalCoronaStatus
+from app.ext.route.globalStatus import GlobalCoronaSearch
 import fastapi_plugins
 import aioredis
 import fastapi
@@ -82,20 +84,8 @@ async def _InspectionDetail(cache: aioredis.Redis = fastapi.Depends(fastapi_plug
     Result = await InspectionDetail(cache=cache, loop=loop)
     return Result
 
-
-@router.get("/kr/news")
-async def KrCoronaNews(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
-    """## 국내 코로나 관련 뉴스를 제공.
-		10분 간격으로 news 정보 업데이트 됩니다.
-		## Naver News
-	"""
-    loop = Performance()
-    Result = await KrNews(cache=cache, loop=loop)
-    return Result
-
-
 @router.get("/global/status")
-async def KrCoronaNews(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+async def _globalStatus(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
     """
 	## 국가별 감염, 완치. 사망 정보 조회
 	"""
@@ -103,6 +93,81 @@ async def KrCoronaNews(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.d
     data = await globalStatus(cache=cache, loop=loop)
     return data
 
+
+@router.get("/global/status/region/{country}")
+async def _globalCoronaSearch(country: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    """## COVID-19 Selection Status by Country
+    ```
+    china                   southkorea          sweden
+    italy                   switzerland         iran
+    unitedkingdom           spain               netherlands
+    germany                 austria             unitedstates
+    belgium                 france              norway
+    denmark                 japan               malaysia
+    canada                  portugal            diamondprincess
+    australia               czechrepublic       israel
+    brazil                  ireland             greece
+    qatar                   pakistan            finland
+    turkey                  poland              singapore
+    chile                   luxembourg          iceland
+    slovenia                indonesia           bahrain
+    romania                 saudiarabia         thailand
+    estonia                 ecuador             egypt
+    philippines             hongkong            russia
+    india                   iraq                lebanon
+    southafrica             kuwait              peru
+    sanmarino               unitedarabemirates  panama
+    slovakia                armenia             mexico
+    croatia                 colombia            taiwan
+    bulgaria                serbia              cyprus
+    argentina               algeria             costarica
+    latvia                  vietnam             uruguay
+    andorra                 brunei              hungary
+    jordan                  albania             bosniaandherzegovina
+    morocco                 srilanka            malta
+    belarus                 moldova             northmacedonia
+    palestinianauthority    azerbaijan          kazakhstan
+    venezuela               georgia             oman
+    tunisia                 newzealand          cambodia
+    lithuania               senegal             dominicanrepublic
+    burkinafaso             liechtenstein       uzbekistan
+    afghanistan             kosovo              bangladesh
+    macau                   ukraine             bolivia
+    jamaica                 congodrc            cameroon
+    honduras                nigeria             cuba
+    ghana                   paraguay            monaco
+    rwanda                  guatemala           ctedivoire
+    trinidadandtobago       montenegro          ethiopia
+    kenya                   mauritius           equatorialguinea
+    mongolia                seychelles          tanzania
+    barbados                guyana              bahamas
+    congo                   gabon               namibia
+    kyrgyzstan              benin               haiti
+    liberia                 mauritania          saintlucia
+    sudan                   zambia              antiguaandbarbuda
+    bhutan                  chad                centralafricanrepublic
+    djibouti                elsalvador          eswatini
+    fiji                    guinea              nepal
+    niger                   nicaragua           stvincentandthegrenadines
+    somalia                 suriname            togo
+    vaticancity             maldives
+    ```
+    """
+    loop = Performance()
+    data = await GlobalCoronaSearch(cache=cache, loop=loop,location=country)
+    if not data:
+        raise HTTPException(status_code=422, detail=f"Validation Error")
+    return data
+
+
+@router.get("/world/status")
+async def _GlobalCoronaStatus(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    """
+	## 전세계 COVID-19 현황
+	"""
+    loop = Performance()
+    data = await GlobalCoronaStatus(cache=cache, loop=loop)
+    return data
 
 @router.get("/euro/status")
 async def EuroCovid(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
@@ -151,3 +216,14 @@ async def EuroCOVID19(select: str, cache: aioredis.Redis = fastapi.Depends(
     da = Euro()
     source = await euroSelectStatus(loop=loop, cache=cache, db=da, select=select)
     return source
+
+
+@router.get("/kr/news")
+async def KrCoronaNews(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    """## 국내 코로나 관련 뉴스를 제공.
+		10분 간격으로 news 정보 업데이트 됩니다.
+		## Naver News
+	"""
+    loop = Performance()
+    Result = await KrNews(cache=cache, loop=loop)
+    return Result

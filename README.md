@@ -53,22 +53,18 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 ### - API Documentation
 
-
 - South Korea COVID-19 Status Inquiry - /v1/kr/status
 - Status of COVID-19 by South Korean cities - /v1/kr/status/region
-
 - COVID-19 status selection search by city - /v1/kr/status/region/{location}
-
 - South Korea COVID-19 Inspection Status | Cumulative Confirmation - /v1/kr/status/inspection
-
 - South Korea COVID-19 inspection details - /v1/kr/status/inspection/detail
 
+- Total COVID-19 confirmed cases worldwide - /v1/world/status
 - Search for worldwide COVID-19 infection, cure and death information - /v1/global/status
+- COVID-19 Selection Status by Country - /v1/global/status/region/{country}
 
 - Europe COVID-19 Status Inquiry - /v1/euro/status
-
 - Europe COVID-19 Status by Country - ​/v1​/euro​/status​/region​/{select}
-
 - News on South Korea's COVID-19 - /v1/kr/news
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
