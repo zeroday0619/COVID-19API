@@ -66,6 +66,7 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 - Europe COVID-19 Status Inquiry - /v1/euro/status
 - Europe COVID-19 Status by Country - ​/v1​/euro​/status​/region​/{select}
 - News on South Korea's COVID-19 - /v1/kr/news
+- etc .......
 
   See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
 

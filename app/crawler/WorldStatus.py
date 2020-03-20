@@ -1,6 +1,4 @@
-from scrapy.selector import Selector
 from app.ext.utils.Performance import Performance
-from .utils import cleanText
 from .utils.msnCovid import MsnCovid
 
 

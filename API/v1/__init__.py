@@ -13,6 +13,7 @@ from app.ext.route.euroStatus import euroStatus
 from app.ext.route.euroStatus import euroSelectStatus
 from app.ext.route.globalStatus import GlobalCoronaStatus
 from app.ext.route.globalStatus import GlobalCoronaSearch
+from app.ext.route.usaStatus import UsaCovid19
 import fastapi_plugins
 import aioredis
 import fastapi
@@ -168,6 +169,25 @@ async def _GlobalCoronaStatus(cache: aioredis.Redis = fastapi.Depends(fastapi_pl
     loop = Performance()
     data = await GlobalCoronaStatus(cache=cache, loop=loop)
     return data
+
+
+@router.get("/global/status/usa")
+async def _UsaCovid19(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    source = UsaCovid19()
+    usaL = await source.StatesCovidStatus(cache=cache)
+    if not usaL:
+        raise HTTPException(status_code=422, detail=f"Validation Error")
+    return usaL
+
+
+@router.get("/global/status/usa/{state}")
+async def _UsaCovid19Status(state: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+    source = UsaCovid19()
+    usa = await source.StatesCovidSearcher(cache=cache, state=state)
+    if not usa:
+        raise HTTPException(status_code=422, detail=f"Validation Error")
+    return usa
+
 
 @router.get("/euro/status")
 async def EuroCovid(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
