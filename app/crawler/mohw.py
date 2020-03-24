@@ -24,16 +24,19 @@ class InfectiousDiseases:
         soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
         _soup = await self.loop.run_in_threadpool(lambda: Selector(text=_data))
 
-        aPatient = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[4]")) # 확진 환자
-        aQuarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[1]")) # 격리중
-        aInIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[2]")) # 격리 해제
-        aDeath = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[3]/table/tbody/tr/td[3]")) # 사망
+        aPatient = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[2]/table/tbody/tr/td[1]")) # 확진 환자
+
+        aQuarantine = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[2]/table/tbody/tr/td[3]")) # 격리중
+
+        aInIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[2]/table/tbody/tr/td[2]")) # 격리 해제
+
+        aDeath = await self.loop.run_in_threadpool(lambda: soup.xpath("//*[@id='content']/div/div[2]/table/tbody/tr/td[4]")) # 사망
 
         # The day before
-        aBeforePatient = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(1) > span.before")) # 확진 환자
-        aBeforeQuarantine = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(3) > span.before")) # 격리중
-        aBeforeInIsolation = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(2) > span.before")) # 격리 해제
-        aBeforeDeath = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div > div > div > div.live_left > div.liveNum > ul > li:nth-child(4) > span.before")) # 사망
+        aBeforePatient = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(1) > span.before")) # 확진 환자
+        aBeforeQuarantine = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(3) > span.before")) # 격리중
+        aBeforeInIsolation = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(2) > span.before")) # 격리 해제
+        aBeforeDeath = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(4) > span.before")) # 사망
 
         _Patient = await self.loop.run_in_threadpool(lambda: aPatient.getall()[0])
         _Quarantine = await self.loop.run_in_threadpool(lambda: aQuarantine.getall()[0])

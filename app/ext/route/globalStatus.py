@@ -1,7 +1,10 @@
 import ujson
+import pycountry
 from app.crawler.csse import CSSEApi
+from app.ext.utils.Performance import Performance
 from app.crawler.WorldStatus import CoronaVirusDiseaseStatus
 from fastapi import HTTPException
+
 
 async def globalStatus(cache, loop):
     if not await cache.exists('global'):
@@ -39,16 +42,28 @@ async def GlobalCoronaStatus(cache, loop):
         return _gcs
 
 
+def countryCode(data):
+
+    codeA = pycountry.countries.get(alpha_2=data)
+    return codeA.name
+
+
+def countryCodeB(data):
+
+    codeA = pycountry.countries.get(name=data)
+    return codeA.alpha_2
+
+
 async def GlobalCoronaSearch(cache, loop, location):
     if not await cache.exists(location):
         source = CoronaVirusDiseaseStatus()
         areas = await source.SearchGlobalCoronaVirusDisease()
         try:
             for index in areas:
-                if index['id'] == location.lower():
+                if index['country'] == location.lower() or index['country'] == countryCode(location):
                     jsonData = {
-                        index['id']: {
-                            "country": index['country'],
+                        location: {
+                            "country": countryCodeB(index['country']),
                             "totalDeaths": index['totalDeaths'],
                             "totalRecovered": index['totalRecovered'],
                             "lastUpdated": index['lastUpdated']
