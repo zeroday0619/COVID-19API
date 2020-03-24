@@ -71,7 +71,7 @@ class InfectiousDiseases:
         BefroeDeath = await StringToInteger(string=dBeforeDeath) # 전일대비 사망
 
         result = {
-            "patient": Patient,
+            "cases": Patient,
             "beforePatient": BeforePatient,
             "quarantine": Quarantine,
             "beforeQuarantine": BeforeQuarantine,
