@@ -1,10 +1,6 @@
-FROM ubuntu:bionic
+FROM matthewfeickert/docker-python3-ubuntu
 LABEL maintainer="zeroday0619 [Euiseo Cha]"
 RUN apt-get update & apt-get upgrade
-RUN apt-get install software-properties-common
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get update & apt-get upgrade
-RUN apt-get install python3.8-dev
 RUN apt-get install python3-pip
 RUN apt-get install redis-server
 RUN systemctl enable redis-server.service
