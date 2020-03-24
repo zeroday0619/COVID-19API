@@ -42,43 +42,26 @@ async def GlobalCoronaStatus(cache, loop):
         return _gcs
 
 
-def countryCode(data):
-
-    codeA = pycountry.countries.get(alpha_2=data)
-    return codeA.name
-
-
-def countryCodeB(data):
-
-    codeA = pycountry.countries.get(name=data)
-    return codeA.alpha_2
+async def CountrySelect(country: str):
+    data = CSSEApi()
+    source = await data.apiProcess()
+    for index in source:
+        if index['country'].lower() == country.lower():
+            return index
 
 
-async def GlobalCoronaSearch(cache, loop, location):
-    if not await cache.exists(location):
-        source = CoronaVirusDiseaseStatus()
-        areas = await source.SearchGlobalCoronaVirusDisease()
-        try:
-            for index in areas:
-                if index['country'] == location.lower() or index['country'] == countryCode(location):
-                    jsonData = {
-                        location: {
-                            "country": countryCodeB(index['country']),
-                            "totalDeaths": index['totalDeaths'],
-                            "totalRecovered": index['totalRecovered'],
-                            "lastUpdated": index['lastUpdated']
-                        }
-                    }
-                    data = jsonData
-                    _data = await loop.run_in_threadpool(lambda: ujson.dumps(data, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
-                    await cache.set(location, _data, expire=3600)
-                    return data
-        except Exception as x:
-            raise HTTPException(status_code=422, detail=f"Validation Error :{str(x)}")
+async def GlobalCoronaSearch(cache, loop, country):
+    if not await cache.exists(country.lower()):
+        data = await CountrySelect(country=country)
+        jsonObject = {
+            country.lower(): data
+        }
+        _result = await loop.run_in_threadpool(lambda: ujson.dumps(jsonObject, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
+        await cache.set(country.lower(), _result, expire=3600)
+        return jsonObject
     else:
-        try:
-            data_ = await cache.get(location)
-            _data = await loop.run_in_threadpool(lambda: ujson.loads(data_))
-            return _data
-        except Exception as e:
-            return HTTPException(status_code=422, detail=f"Validation Error :{str(x)}")
+        result_ = await cache.get('world')
+        _result = await loop.run_in_threadpool(lambda: ujson.loads(result_))
+        _result
+
+

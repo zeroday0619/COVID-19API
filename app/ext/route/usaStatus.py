@@ -33,7 +33,7 @@ class UsaCovid19:
                         jsonData = {
                             state: {
                                 "state": index['state'].lower(),
-                                "totalConfirmed": index['totalConfirmed'],
+                                "totalCases": index['totalConfirmed'],
                                 "totalDeaths": index['totalDeaths'],
                                 "totalRecovered": index['totalRecovered'],
                                 "lastUpdated": index['lastUpdated']

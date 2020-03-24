@@ -72,13 +72,13 @@ class InfectiousDiseases:
 
         result = {
             "patient": Patient,
-            "before_patient": BeforePatient,
+            "beforePatient": BeforePatient,
             "quarantine": Quarantine,
-            "before_quarantine": BeforeQuarantine,
-            "inisolation": InIsolation,
-            "before_inisolation": BefroeInIsolation,
+            "beforeQuarantine": BeforeQuarantine,
+            "recovered": InIsolation,
+            "beforeRecovered": BefroeInIsolation,
             "death": death,
-            "before_death": BefroeDeath
+            "beforeDeath": BefroeDeath
         }
         return result
 
@@ -118,18 +118,19 @@ class InfectiousDiseases:
         g = await cleanText(await self.loop.run_in_threadpool(lambda: UnderInspection.getall()[0]))
         h = await cleanText(await self.loop.run_in_threadpool(lambda: Total.getall()[0]))
         jsondata = {
-            "ConfirmationPatient":{
-                "InIsolation": int(a.replace(",", '')),
-                "Quarantine": int(b.replace(",", '')),
-                "Death": int(c.replace(",", '')),
-                "SubTotal": int(d.replace(",", '')),
+            "cases": {
+                "recovered": int(a.replace(",", '')),
+                "quarantine": int(b.replace(",", '')),
+                "death": int(c.replace(",", '')),
+                "subTotal": int(d.replace(",", '')),
             },
-            "NegativeResult": int(e.replace(",", '')),
-            "InspectionCompleted": int(f.replace(",", '')),
-            "UnderInspection": int(g.replace(",", '')),
-            "Total": int(h.replace(",", ''))
+            "negativeResult": int(e.replace(",", '')),
+            "inspectionCompleted": int(f.replace(",", '')),
+            "underInspection": int(g.replace(",", '')),
+            "total": int(h.replace(",", ''))
         }
         return jsondata
+
 
 class GetInfectiousDiseasesbyRegion:
     def __init__(self, mode=13):

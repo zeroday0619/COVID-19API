@@ -18,7 +18,7 @@ class CoronaVirusDiseaseStatus:
         """
         source = await self.source.MsnRequest()
         data = {
-            "totalConfirmed": source['totalConfirmed'],
+            "totalCases": source['totalConfirmed'],
             "totalDeaths": source['totalDeaths'],
             "totalRecovered": source['totalRecovered'],
             "lastUpdated": source['lastUpdated']

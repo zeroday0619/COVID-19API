@@ -22,16 +22,16 @@ async def InspectionDetail(cache, loop):
     """InspectionDetail
 	검사현황 - Detail
 	"""
-    if not await cache.exists('InspectionDetail'):
+    if not await cache.exists('inspectionDetail'):
         data = InfectiousDiseases()
         Result = await data.InspectionStatusDetail()
         isd = {
-            "InspectionDetail": Result
+            "inspectionDetail": Result
         }
         pb = await loop.run_in_threadpool(lambda: ujson.dumps(isd).encode('utf-8'))
-        await cache.set('InspectionDetail', pb, expire=3600)
+        await cache.set('inspectionDetail', pb, expire=3600)
         return isd
     else:
-        abc = await cache.get('InspectionDetail', encoding='utf-8')
+        abc = await cache.get('inspectionDetail', encoding='utf-8')
         txt = await loop.run_in_threadpool(lambda: ujson.loads(abc))
         return txt

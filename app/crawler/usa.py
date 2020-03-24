@@ -21,7 +21,7 @@ class Usa:
         for index in source:
             jsonTemplit = {
                 "state": index['displayName'],
-                "totalConfirmed": index['totalConfirmed'],
+                "totalCases": index['totalConfirmed'],
                 "totalDeaths": index['totalDeaths'],
                 "totalRecovered": index['totalRecovered'],
                 "lastUpdated": index['lastUpdated']

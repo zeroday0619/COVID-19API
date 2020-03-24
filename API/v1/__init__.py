@@ -19,7 +19,7 @@ import aioredis
 import fastapi
 import typing
 import ujson
-
+from app.crawler.csse import CSSEApi
 
 router = APIRouter()
 
@@ -98,64 +98,9 @@ async def _globalStatus(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.
 @router.get("/global/status/region/{country}")
 async def _globalCoronaSearch(country: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
     """## COVID-19 Selection Status by Country
-    ```
-    china                   southkorea          sweden
-    italy                   switzerland         iran
-    unitedkingdom           spain               netherlands
-    germany                 austria             unitedstates
-    belgium                 france              norway
-    denmark                 japan               malaysia
-    canada                  portugal            diamondprincess
-    australia               czechrepublic       israel
-    brazil                  ireland             greece
-    qatar                   pakistan            finland
-    turkey                  poland              singapore
-    chile                   luxembourg          iceland
-    slovenia                indonesia           bahrain
-    romania                 saudiarabia         thailand
-    estonia                 ecuador             egypt
-    philippines             hongkong            russia
-    india                   iraq                lebanon
-    southafrica             kuwait              peru
-    sanmarino               unitedarabemirates  panama
-    slovakia                armenia             mexico
-    croatia                 colombia            taiwan
-    bulgaria                serbia              cyprus
-    argentina               algeria             costarica
-    latvia                  vietnam             uruguay
-    andorra                 brunei              hungary
-    jordan                  albania             bosniaandherzegovina
-    morocco                 srilanka            malta
-    belarus                 moldova             northmacedonia
-    palestinianauthority    azerbaijan          kazakhstan
-    venezuela               georgia             oman
-    tunisia                 newzealand          cambodia
-    lithuania               senegal             dominicanrepublic
-    burkinafaso             liechtenstein       uzbekistan
-    afghanistan             kosovo              bangladesh
-    macau                   ukraine             bolivia
-    jamaica                 congodrc            cameroon
-    honduras                nigeria             cuba
-    ghana                   paraguay            monaco
-    rwanda                  guatemala           ctedivoire
-    trinidadandtobago       montenegro          ethiopia
-    kenya                   mauritius           equatorialguinea
-    mongolia                seychelles          tanzania
-    barbados                guyana              bahamas
-    congo                   gabon               namibia
-    kyrgyzstan              benin               haiti
-    liberia                 mauritania          saintlucia
-    sudan                   zambia              antiguaandbarbuda
-    bhutan                  chad                centralafricanrepublic
-    djibouti                elsalvador          eswatini
-    fiji                    guinea              nepal
-    niger                   nicaragua           stvincentandthegrenadines
-    somalia                 suriname            togo
-    vaticancity             maldives
-    ```
     """
     loop = Performance()
-    data = await GlobalCoronaSearch(cache=cache, loop=loop,location=country)
+    data = await GlobalCoronaSearch(cache=cache, loop=loop, country=country)
     if not data:
         raise HTTPException(status_code=422, detail=f"Validation Error")
     return data

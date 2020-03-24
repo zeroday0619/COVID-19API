@@ -36,7 +36,7 @@ class CSSEParser:
             result = {
                 "country": row['attributes']['Country_Region'],
                 "state": {
-                    "patient": row['attributes']['Confirmed'],
+                    "cases": row['attributes']['Confirmed'],
                     "recovered": row['attributes']['Recovered'],
                     "death": row['attributes']['Deaths']
                 }
