@@ -27,6 +27,7 @@ class Paser:
             InspectionList.append(res)
         return InspectionList
 
+
     async def CumulativeInspection(self):
         il = await Paser().Select()
         jsondata = {

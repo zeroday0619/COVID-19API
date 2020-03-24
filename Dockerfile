@@ -1,7 +1,10 @@
-FROM python:3.8-alpine
+FROM ubuntu:bionic
 LABEL maintainer="zeroday0619 [Euiseo Cha]"
-RUN apk add --no-cache --virtual alpine-sdk build-base python3.8-dev
-RUN python3.8 -m pip install fastapi[all] fastapi-plugins
+RUN apt-get update & apt-get upgrade -y
+RUN apt-get install build-essential tcl python3.8-dev -y
+RUN apt-get install redis-server -y
+RUN systemctl enable redis-server.service
+RUN python3.8 -m pip install -r requirements.txt
 RUN mkdir -p /usr/src/ncov
 COPY . /usr/src/ncov
 WORKDIR /usr/src/ncov
