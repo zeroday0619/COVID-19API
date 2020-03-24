@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 LABEL maintainer="zeroday0619 [Euiseo Cha]"
 RUN apt-get update & apt-get upgrade -y
-RUN apt-get install python3.8-dev -y
+RUN apt-get install python3.8 -y
 RUN apt-get install redis-server -y
 RUN systemctl enable redis-server.service
 RUN python3.8 -m pip install -r requirements.txt
