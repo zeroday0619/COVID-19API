@@ -17,7 +17,7 @@ class Paser:
         """scrapy Selector"""
         html = await self.KcdcApiV2.Request()
         data = await self.loop.run_in_threadpool(lambda: Selector(text=html))
-        realtime = await self.loop.run_in_threadpool(lambda: data.xpath("/html/body/div/div[5]/div/div/div/div[1]/div[2]/div[1]/ul"))
+        realtime = await self.loop.run_in_threadpool(lambda: data.xpath("/html/body/div/div[5]/div[2]/div/div[1]/div[2]/div/div[1]/div[1]/div[1]/ul"))
         span = await self.loop.run_in_threadpool(lambda: realtime.css("li > span"))
         o = await self.loop.run_in_threadpool(lambda: span.getall())
 
