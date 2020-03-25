@@ -38,6 +38,9 @@ class InfectiousDiseases:
         aBeforeInIsolation = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(2) > span.before")) # 격리 해제
         aBeforeDeath = await self.loop.run_in_threadpool(lambda: _soup.css("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div > ul > li:nth-child(4) > span.before")) # 사망
 
+        aTodayCases = await self.loop.run_in_threadpool(lambda: _soup.xpath('/html/body/div/div[5]/div[2]/div/div[1]/div[1]/ul/li[1]/span[2]'))
+        aTodayRecovered = await self.loop.run_in_threadpool(lambda: _soup.xpath('/html/body/div/div[5]/div[2]/div/div[1]/div[1]/ul/li[2]/span[2]'))
+
         _Patient = await self.loop.run_in_threadpool(lambda: aPatient.getall()[0])
         _Quarantine = await self.loop.run_in_threadpool(lambda: aQuarantine.getall()[0])
         _InIsolation = await self.loop.run_in_threadpool(lambda: aInIsolation.getall()[0])
@@ -48,6 +51,10 @@ class InfectiousDiseases:
         sBeforeQuarantine = await self.loop.run_in_threadpool(lambda: aBeforeQuarantine.getall()[0]) # 격리 중
         sBeforeInIsolation = await self.loop.run_in_threadpool(lambda: aBeforeInIsolation.getall()[0]) #격리 해제
         sBeforeDeath = await self.loop.run_in_threadpool(lambda: aBeforeDeath.getall()[0]) # 사망
+
+        __TodayCases = await self.loop.run_in_threadpool(lambda: aTodayCases.getall()[0])
+        __TodayRecovered = await self.loop.run_in_threadpool(lambda: aTodayRecovered.getall()[0])
+
 
         Patient_ = await cleanText(_Patient)
         Quarantine_ = await cleanText(_Quarantine)
@@ -60,6 +67,9 @@ class InfectiousDiseases:
         dBeforeInIsolation = await cleanText(sBeforeInIsolation) # 격리 해제
         dBeforeDeath = await cleanText(sBeforeDeath) # 사망
 
+        _TodayCases = await cleanText(__TodayCases)
+        _TodayRecovered = await cleanText(__TodayRecovered)
+
         Patient = await StringToInteger(string=Patient_)
         Quarantine = await StringToInteger(string=Quarantine_)
         InIsolation = await StringToInteger(string=InIsolation_)
@@ -70,7 +80,12 @@ class InfectiousDiseases:
         BefroeInIsolation = await StringToInteger(string=dBeforeInIsolation) # 전일대비 격리 해제
         BefroeDeath = await StringToInteger(string=dBeforeDeath) # 전일대비 사망
 
+        TodayCases = await StringToInteger(_TodayCases)
+        TodayRecovered = await StringToInteger(_TodayRecovered)
+
         result = {
+            "todayCases": TodayCases,
+            "todayRecovered": TodayRecovered,
             "cases": Patient,
             "beforeCases": BeforePatient,
             "quarantine": Quarantine,
