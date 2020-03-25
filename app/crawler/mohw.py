@@ -72,7 +72,7 @@ class InfectiousDiseases:
 
         result = {
             "cases": Patient,
-            "beforePatient": BeforePatient,
+            "beforeCases": BeforePatient,
             "quarantine": Quarantine,
             "beforeQuarantine": BeforeQuarantine,
             "recovered": InIsolation,
