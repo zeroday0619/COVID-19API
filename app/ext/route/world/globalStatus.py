@@ -1,9 +1,6 @@
 import ujson
-import pycountry
-from app.crawler.csse import CSSEApi
-from app.ext.utils.Performance import Performance
-from app.crawler.WorldStatus import CoronaVirusDiseaseStatus
-from fastapi import HTTPException
+from app.crawler.world.csse import CSSEApi
+from app.crawler.world.WorldStatus import CoronaVirusDiseaseStatus
 
 
 async def globalStatus(cache, loop):

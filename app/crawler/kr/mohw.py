@@ -1,9 +1,6 @@
 from scrapy.selector import Selector
-from .utils import KcdcApi
+from app.crawler.utils.ext import KcdcApi, cleanText, StringToInteger, JsonData
 from app.ext.utils.Performance import Performance
-from .utils import cleanText
-from .utils import StringToInteger
-from .utils import JsonData
 from app.ext.utils.route import route
 
 

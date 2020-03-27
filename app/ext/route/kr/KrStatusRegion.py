@@ -1,5 +1,5 @@
 import ujson
-from app.crawler.mohw import GetInfectiousDiseasesbyRegion
+from app.crawler.kr.mohw import GetInfectiousDiseasesbyRegion
 
 
 async def KrStatusRegion(cache, loop):

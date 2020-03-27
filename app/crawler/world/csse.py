@@ -1,4 +1,4 @@
-from .utils.csseAPI import CSSEParser
+from app.crawler.utils.world.csseAPI import CSSEParser
 
 
 class CSSEApi:

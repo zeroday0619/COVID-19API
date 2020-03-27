@@ -1,5 +1,5 @@
 from app.ext.utils.Performance import Performance
-from .utils.msnCovid import MsnCovid
+from app.crawler.utils.world.msnCovid import MsnCovid
 
 
 class Usa:

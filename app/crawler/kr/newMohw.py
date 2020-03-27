@@ -1,7 +1,7 @@
 from scrapy.selector import Selector
 from app.ext.utils.Performance import Performance
-from .utils.kcdcAPI_V2 import KcdcApiV2
-from .utils import cleanText
+from app.crawler.utils.kr.kcdcAPI_V2 import KcdcApiV2
+from app.crawler.utils.ext import cleanText
 
 
 class Paser:

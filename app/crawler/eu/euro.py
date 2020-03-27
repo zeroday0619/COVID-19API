@@ -1,6 +1,5 @@
-import ujson
-from .utils.ecdcApi import Ecdc
-from .utils import EuroJsonData
+from app.crawler.utils.eu.ecdcApi import Ecdc
+from app.crawler.utils.ext import EuroJsonData
 from app.ext.utils.Performance import Performance
 
 

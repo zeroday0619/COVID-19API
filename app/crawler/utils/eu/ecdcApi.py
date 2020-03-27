@@ -1,7 +1,7 @@
 from app.ext.utils.Performance import Performance
 from scrapy.selector import Selector
 from async_lru import alru_cache
-from . import cleanText
+from app.crawler.utils.ext import cleanText
 import aiohttp
 
 

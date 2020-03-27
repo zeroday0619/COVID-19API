@@ -1,8 +1,7 @@
 from scrapy.selector import Selector
 from app.ext.utils.Performance import Performance
-from .utils.news import CoronaNewsCrawler
-from .utils import NewsNogadaJsonData
-from .utils import cleanText
+from app.crawler.utils.kr.news import CoronaNewsCrawler
+from app.crawler.utils.ext import cleanText, NewsNogadaJsonData
 
 
 class KrNewsParser:

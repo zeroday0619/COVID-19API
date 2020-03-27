@@ -1,4 +1,4 @@
-from app.crawler.usa import Usa
+from app.crawler.us.usa import Usa
 from fastapi import HTTPException
 from app.ext.utils.Performance import Performance
 import ujson

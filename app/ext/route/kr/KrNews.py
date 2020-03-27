@@ -1,4 +1,4 @@
-from app.crawler.krnews import KrNewsParser
+from app.crawler.kr.krnews import KrNewsParser
 import ujson
 
 
