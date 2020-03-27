@@ -31,9 +31,7 @@ async def GlobalCoronaStatus(cache, loop):
         gcs_ = {
             "world": data
         }
-        _gcs = await loop.run_in_threadpool(
-            lambda: ujson.dumps(gcs_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode(
-                'utf-8'))
+        _gcs = await loop.run_in_threadpool(lambda: ujson.dumps(gcs_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
         await cache.set('world', _gcs, expire=3600)
         return gcs_
     else:
@@ -62,6 +60,6 @@ async def GlobalCoronaSearch(cache, loop, country):
     else:
         result_ = await cache.get('world')
         _result = await loop.run_in_threadpool(lambda: ujson.loads(result_))
-        _result
+        return _result
 
 

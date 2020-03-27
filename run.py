@@ -4,6 +4,7 @@
 :copyright: Copyright 2020, zeroday0619
 """
 import pydantic
+import logging
 import fastapi_plugins
 from fastapi import FastAPI
 from API.v1 import router
@@ -24,7 +25,7 @@ app = FastAPI(
     description="## 코로나 바이러스 감염증 -19 (COVID-19)의 국내/해외 현황/뉴스 제공 API \n\n ### Project Repo: [Github]("
                 "https://github.com/zeroday0619/COVID-19API)",
     version="2020.03.20 Prerelease V1409",
-    debug=False
+    debug=True
 )
 config = AppSettings()
 

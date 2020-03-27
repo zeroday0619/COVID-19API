@@ -1,3 +1,4 @@
+from async_lru import alru_cache
 import aiohttp
 
 
@@ -14,6 +15,7 @@ class CoronaNewsCrawler:
             "tqi": "UEfQtdp0YiRssPppOAossssstyG-455013"
         }
 
+    @alru_cache(maxsize=32)
     async def Request(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.url, params=self.payload) as resp:

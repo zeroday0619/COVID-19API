@@ -1,5 +1,6 @@
 import aiohttp
 from app.ext.utils.Performance import Performance
+from async_lru import alru_cache
 from bs4 import BeautifulSoup
 
 
@@ -22,6 +23,7 @@ class kcdcAPI:
             "brdGubun": mode 
         }
 
+    @alru_cache(maxsize=32)
     async def GetInfectiousDiseases(self):
         """국내 감염증 정보 파싱"""
         async with aiohttp.ClientSession(headers=self.headers) as session:
@@ -29,13 +31,15 @@ class kcdcAPI:
                 info = await resp.text()
         soup = await self.loop.run_in_threadpool(lambda: BeautifulSoup(info, 'lxml'))
         return soup
-    
+
+    @alru_cache(maxsize=32)
     async def GetInfectiousDiseases2(self):
         async with aiohttp.ClientSession(headers=self.headers) as session:
             async with session.get(url=self.url, params=self.payload) as resp:
                 info = await resp.text()
         return info
 
+    @alru_cache(maxsize=32)
     async def GetInfectiousDiseases3(self):
         """국내 감염증 정보 파싱"""
         async with aiohttp.ClientSession(headers=self.headers) as session:
@@ -43,6 +47,7 @@ class kcdcAPI:
                 info = await resp.text()
         return info
 
+    @alru_cache(maxsize=32)
     async def GetInfectiousDiseases4(self):
         async with aiohttp.ClientSession(headers=self.headers) as session:
             async with session.get(url=self.MainUrl) as resp:

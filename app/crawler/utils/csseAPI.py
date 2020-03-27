@@ -4,6 +4,7 @@ https://github.com/KKodiac/Covid19_Stats/blob/master/Covid-19/covid19_wd.py
 """
 import aiohttp
 import ujson
+from async_lru import alru_cache
 from app.ext.utils.Performance import Performance
 
 
@@ -21,6 +22,7 @@ class CSSEParser:
             "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0"
         }
 
+    @alru_cache(maxsize=32)
     async def Processing(self):
 
         async with aiohttp.ClientSession() as session:

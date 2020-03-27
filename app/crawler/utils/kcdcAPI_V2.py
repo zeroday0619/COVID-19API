@@ -1,3 +1,4 @@
+from async_lru import alru_cache
 import aiohttp
 
 
@@ -10,6 +11,7 @@ class KcdcApiV2:
             "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0"
         }
 
+    @alru_cache(maxsize=32)
     async def Request(self):
         """HTTP GET Request
         :return: html

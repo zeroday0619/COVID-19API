@@ -1,3 +1,4 @@
+from async_lru import alru_cache
 import aiohttp
 
 
@@ -14,6 +15,7 @@ class MsnCovid:
 
         }
 
+    @alru_cache(maxsize=32)
     async def MsnRequest(self):
         async with aiohttp.ClientSession(headers=self.headers) as session:
             async with session.get(url=self.url) as resp:

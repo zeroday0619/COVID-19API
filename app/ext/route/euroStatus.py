@@ -126,4 +126,4 @@ async def euroSelectStatus(loop, cache, db, select):
         source = await euroSelect(loop=loop, cache=cache, db=db, name="region31", num=30)
         return source
     else:
-        raise HTTPException(status=404, detail="select not found")
+        raise HTTPException(status_code=404, detail="select not found")
