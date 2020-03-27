@@ -17,11 +17,11 @@ class UsaCovid19:
             }
             converted = await self.loop.run_in_threadpool(lambda: ujson.dumps(jsondata).encode('utf-8'))
             await cache.set('usa', converted, expire=3600)
-            return jsondata
+            return jsondata["usa"]
         else:
             NoneConverted = await cache.get('usa', encoding='utf-8')
             Converted = await self.loop.run_in_threadpool(lambda: ujson.loads(NoneConverted))
-            return Converted
+            return Converted["usa"]
 
     async def StatesCovidSearcher(self, cache, state):
         if not await cache.exists(state.lower()):
@@ -48,10 +48,10 @@ class UsaCovid19:
                             ).encode('utf-8')
                         )
                         await cache.set(state.lower(), _data, expire=3600)
-                        return data
+                        return data[state.lower()]
             except Exception as x:
                 raise HTTPException(status_code=422, detail=f"Validation Error {str(x)}")
         else:
             NoneConverted = await cache.get(state)
             Converted = await self.loop.run_in_threadpool(lambda: ujson.loads(NoneConverted))
-            return Converted
+            return Converted[state.lower()]

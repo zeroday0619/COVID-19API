@@ -1,7 +1,7 @@
 # COVID-19API
 
 ### 코로나 바이러스 감염증-19(COVID-19, SARS-CoV-2)의 국내/외 발생 동향 조회 API
-### Corona Virus Infectious Disease-19 (COVID-19, SARS-CoV-2) domestic / overseas outbreak trend inquiry API
+### Corona Virus Infectious Disease-19 (COVID-19, SARS-CoV-2) outbreak trend inquiry API
 
  ![License](https://img.shields.io/badge/License-MIT-blue)![pythonVersion](https://img.shields.io/badge/python-v3.8-blue)
 
@@ -53,22 +53,8 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 ### - API Documentation
 
-- South Korea COVID-19 Status Inquiry - /v1/kr/status
-- Status of COVID-19 by South Korean cities - /v1/kr/status/region
-- COVID-19 status selection search by city - /v1/kr/status/region/{location}
-- South Korea COVID-19 Inspection Status | Cumulative Confirmation - /v1/kr/status/inspection
-- South Korea COVID-19 inspection details - /v1/kr/status/inspection/detail
-
-- Total COVID-19 confirmed cases worldwide - /v1/world/status
-- Search for worldwide COVID-19 infection, cure and death information - /v1/global/status
-- COVID-19 Selection Status by Country - /v1/global/status/region/{country}
-
-- Europe COVID-19 Status Inquiry - /v1/euro/status
-- Europe COVID-19 Status by Country - ​/v1​/euro​/status​/region​/{select}
-- News on South Korea's COVID-19 - /v1/kr/news
-- etc .......
-
-  See [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
+  - [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
+  - [https://ncov.zeroday0619.kr/redoc](https://ncov.zeroday0619.kr/redoc)
 
 ### - Example
 
@@ -80,7 +66,6 @@ resp = requests.get(url).json()
 result = resp['krstatus']
 print(result)
 ```
-
 
 
 ## License

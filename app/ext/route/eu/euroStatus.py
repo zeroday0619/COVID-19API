@@ -1,6 +1,7 @@
 import ujson
 from fastapi import HTTPException
 
+
 async def euroStatus(loop, cache, db):
     if not await cache.exists('euro'):
         data = await db.EuroCovid()
@@ -9,11 +10,11 @@ async def euroStatus(loop, cache, db):
         }
         _euro = await loop.run_in_threadpool(lambda: ujson.dumps(euro_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=False).encode('utf-8'))
         await cache.set('euro', _euro, expire=3600)
-        return euro_
+        return euro_["euro"]
     else:
         euro_ = await cache.get('euro')
         _euro = await loop.run_in_threadpool(lambda: ujson.loads(euro_))
-        return _euro
+        return _euro["euro"]
 
 
 async def euroSelect(loop, cache, db, name: str, num: int):
@@ -24,11 +25,11 @@ async def euroSelect(loop, cache, db, name: str, num: int):
         }
         _euro = await loop.run_in_threadpool(lambda: ujson.dumps(euro_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=False).encode('utf-8'))
         await cache.set(name, _euro, expire=3600)
-        return euro_
+        return euro_[name]
     else:
         euro_ = await cache.get(name)
         _euro = await loop.run_in_threadpool(lambda: ujson.loads(euro_))
-        return _euro
+        return _euro[name]
 
 
 async def euroSelectStatus(loop, cache, db, select):

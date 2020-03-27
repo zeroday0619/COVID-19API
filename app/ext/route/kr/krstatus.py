@@ -11,11 +11,11 @@ async def krstatus(cache, loop):
         }
         pb = await loop.run_in_threadpool(lambda: ujson.dumps(rs).encode('utf-8'))
         await cache.set('krstatus', pb, expire=3600)
-        return rs
+        return rs["krstatus"]
     else:
         abc = await cache.get('krstatus', encoding='utf-8')
         adad = await loop.run_in_threadpool(lambda: ujson.loads(abc))
-        return adad
+        return adad["krstatus"]
 
 
 async def InspectionDetail(cache, loop):
@@ -30,8 +30,8 @@ async def InspectionDetail(cache, loop):
         }
         pb = await loop.run_in_threadpool(lambda: ujson.dumps(isd).encode('utf-8'))
         await cache.set('inspectionDetail', pb, expire=3600)
-        return isd
+        return isd["inspectionDetail"]
     else:
         abc = await cache.get('inspectionDetail', encoding='utf-8')
         txt = await loop.run_in_threadpool(lambda: ujson.loads(abc))
-        return txt
+        return txt["inspectionDetail"]

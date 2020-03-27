@@ -11,8 +11,8 @@ async def KrCumulativeInspection(loop, cache):
         }
         _kci = await loop.run_in_threadpool(lambda: ujson.dumps(kci, ensure_ascii=False).encode('utf-8'))
         await cache.set('kci', _kci, expire=1800)
-        return kci
+        return kci["kci"]
     else:
         kci = await cache.get('kci')
         _kci = await loop.run_in_threadpool(lambda: ujson.loads(kci))
-        return _kci
+        return _kci["kci"]

@@ -7,11 +7,11 @@ async def LocationSelector(cache, loop, name, regionNumber, data):
         seoul = await data.Classification(regionNumber)
         _seoul = await loop.run_in_threadpool(lambda: ujson.dumps(seoul).encode('utf-8'))
         await cache.set(name, _seoul, expire=3600)
-        return seoul
+        return seoul[name.upper()]
     else:
         seoul = await cache.get(name, encoding='utf-8')
         _seoul = await loop.run_in_threadpool(lambda: ujson.loads(seoul))
-        return _seoul
+        return _seoul[name.upper()]
 
 
 async def loc(location, data, loop, cache):

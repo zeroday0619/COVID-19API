@@ -1,6 +1,7 @@
 import ujson
 from app.crawler.world.csse import CSSEApi
 from app.crawler.world.WorldStatus import CoronaVirusDiseaseStatus
+from app.crawler.utils.ext.country import isoCountries
 
 
 async def globalStatus(cache, loop):
@@ -14,11 +15,11 @@ async def globalStatus(cache, loop):
             lambda: ujson.dumps(global_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode(
                 'utf-8'))
         await cache.set('global', _global, expire=3600)
-        return global_
+        return global_["global"]
     else:
         global_ = await cache.get('global')
         _global = await loop.run_in_threadpool(lambda: ujson.loads(global_))
-        return _global
+        return _global["global"]
 
 
 async def GlobalCoronaStatus(cache, loop):
@@ -30,18 +31,24 @@ async def GlobalCoronaStatus(cache, loop):
         }
         _gcs = await loop.run_in_threadpool(lambda: ujson.dumps(gcs_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
         await cache.set('world', _gcs, expire=3600)
-        return gcs_
+        return gcs_["world"]
     else:
         gcs_ = await cache.get('world')
         _gcs = await loop.run_in_threadpool(lambda: ujson.loads(gcs_))
-        return _gcs
+        return _gcs["world"]
+
+
+async def CountryCodeConverter(source):
+    for index in isoCountries:
+        if index["ccode"].lower() == source:
+            return index["cname"]
 
 
 async def CountrySelect(country: str):
     data = CSSEApi()
     source = await data.apiProcess()
     for index in source:
-        if index['country'].lower() == country.lower():
+        if index['country'] == await CountryCodeConverter(source=country):
             return index
 
 
@@ -53,10 +60,10 @@ async def GlobalCoronaSearch(cache, loop, country):
         }
         _result = await loop.run_in_threadpool(lambda: ujson.dumps(jsonObject, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
         await cache.set(country.lower(), _result, expire=3600)
-        return jsonObject
+        return jsonObject[country.lower()]
     else:
-        result_ = await cache.get('world')
+        result_ = await cache.get(country.lower())
         _result = await loop.run_in_threadpool(lambda: ujson.loads(result_))
-        return _result
+        return _result[country.lower()]
 
 

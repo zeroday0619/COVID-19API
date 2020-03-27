@@ -11,8 +11,8 @@ async def KrNews(cache, loop):
         }
         _news = await loop.run_in_threadpool(lambda: ujson.dumps(news, ensure_ascii=False, escape_forward_slashes=False).encode('utf-8'))
         await cache.set('news', _news, expire=600)
-        return news
+        return news["news"]
     else:
         news = await cache.get('news')
         _news = await loop.run_in_threadpool(lambda: ujson.loads(news))
-        return _news
+        return _news["news"]
