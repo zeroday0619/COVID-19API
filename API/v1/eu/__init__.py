@@ -1,4 +1,3 @@
-from self import self
 from app.crawler.eu.euro import Euro
 from app.ext.route.eu.euroStatus import euroStatus
 from app.ext.route.eu.euroStatus import euroSelectStatus

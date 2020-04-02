@@ -1,8 +1,6 @@
 import ujson
 from app.crawler.utils.ext.country import isoCountries
 from app.crawler.world.csse import CSSEApi
-from app.crawler.world.WorldStatus import CoronaVirusDiseaseStatus
-
 
 
 async def globalStatus(cache, loop):
@@ -21,22 +19,6 @@ async def globalStatus(cache, loop):
         global_ = await cache.get('global')
         _global = await loop.run_in_threadpool(lambda: ujson.loads(global_))
         return _global["global"]
-
-
-async def GlobalCoronaStatus(cache, loop):
-    if not await cache.exists('world'):
-        source = CoronaVirusDiseaseStatus()
-        data = await source.GlobalCoronaVirusDisease()
-        gcs_ = {
-            "world": data
-        }
-        _gcs = await loop.run_in_threadpool(lambda: ujson.dumps(gcs_, ensure_ascii=False, escape_forward_slashes=False, sort_keys=True).encode('utf-8'))
-        await cache.set('world', _gcs, expire=3600)
-        return gcs_["world"]
-    else:
-        gcs_ = await cache.get('world')
-        _gcs = await loop.run_in_threadpool(lambda: ujson.loads(gcs_))
-        return _gcs["world"]
 
 
 async def CountryCodeConverter(source):
