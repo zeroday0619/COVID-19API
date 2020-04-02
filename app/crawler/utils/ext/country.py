@@ -1,3 +1,4 @@
+"""https://gist.github.com/carlopires/1261951/d13ca7320a6abcd4b0aa800d351a31b54cefdff4"""
 isoCountries = [
     {'ccode': 'AF', 'cname': 'Afghanistan'},
     {'ccode': 'AX', 'cname': 'Aland Islands'},
@@ -123,8 +124,7 @@ isoCountries = [
     {'ccode': 'KZ', 'cname': 'Kazakhstan'},
     {'ccode': 'KE', 'cname': 'Kenya'},
     {'ccode': 'KI', 'cname': 'Kiribati'},
-    {'ccode': 'KR', 'cname': 'Korea'},
-    {'ccode': 'KR', 'cname': 'S. Korea'},
+    {'ccode': 'KR', 'cname': 'Korea, South'},
     {'ccode': 'KW', 'cname': 'Kuwait'},
     {'ccode': 'KG', 'cname': 'Kyrgyzstan'},
     {'ccode': 'LA', 'cname': 'Lao People\'s Democratic Republic'},

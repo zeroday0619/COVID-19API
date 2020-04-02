@@ -53,15 +53,15 @@ sudo uvicorn run:app --host 0.0.0.0 --port 80
 
 ### - API Documentation
 
-  - [https://ncov.zeroday0619.kr/docs](https://ncov.zeroday0619.kr/docs)
-  - [https://ncov.zeroday0619.kr/redoc](https://ncov.zeroday0619.kr/redoc)
+  - [https://ncov.zeroday0619.dev/docs](https://ncov.zeroday0619.dev/docs)
+  - [https://ncov.zeroday0619.dev/redoc](https://ncov.zeroday0619.dev/redoc)
 
 ### - Example
 
 ```python
 import requests
 import json
-url = "https://ncov.zeroday0619.kr/v1/kr/status"
+url = "https://ncov.zeroday0619.dev/v1/kr/status"
 resp = requests.get(url).json()
 result = resp['krstatus']
 print(result)

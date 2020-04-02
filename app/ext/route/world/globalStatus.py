@@ -1,7 +1,8 @@
 import ujson
+from app.crawler.utils.ext.country import isoCountries
 from app.crawler.world.csse import CSSEApi
 from app.crawler.world.WorldStatus import CoronaVirusDiseaseStatus
-from app.crawler.utils.ext.country import isoCountries
+
 
 
 async def globalStatus(cache, loop):
@@ -40,15 +41,15 @@ async def GlobalCoronaStatus(cache, loop):
 
 async def CountryCodeConverter(source):
     for index in isoCountries:
-        if index["ccode"].lower() == source:
-            return index["cname"]
+        if index["ccode"].lower() == source.lower():
+            return index["cname"].lower()
 
 
 async def CountrySelect(country: str):
     data = CSSEApi()
     source = await data.apiProcess()
     for index in source:
-        if index['country'] == await CountryCodeConverter(source=country):
+        if index['country'].lower() == await CountryCodeConverter(source=country):
             return index
 
 
@@ -65,5 +66,6 @@ async def GlobalCoronaSearch(cache, loop, country):
         result_ = await cache.get(country.lower())
         _result = await loop.run_in_threadpool(lambda: ujson.loads(result_))
         return _result[country.lower()]
+
 
 
