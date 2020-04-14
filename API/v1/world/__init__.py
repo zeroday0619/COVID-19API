@@ -1,4 +1,4 @@
-from app.ext.route.world.globalStatus import GlobalCoronaSearch
+from app.ext.route.world.globalStatus import globalStatus
 from fastapi import APIRouter, HTTPException
 from app.ext.utils.Performance import Performance
 import fastapi_plugins
@@ -18,7 +18,7 @@ class GlobalRouter(APIRouter()):
 async def _globalCoronaSearch(country: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
     """## COVID-19 Selection Status by Country
     """
-    data = await GlobalCoronaSearch(cache=cache, loop=loop, country=country)
+    data = await globalStatus(cache=cache, loop=loop)
     if not data:
         raise HTTPException(status_code=422, detail=f"Validation Error")
     return data
