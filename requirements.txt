@@ -6,3 +6,4 @@ Scrapy~=2.0.1
 aiohttp~=3.6.2
 bs4~=0.0.1
 beautifulsoup4~=4.4.1
+async_lru
