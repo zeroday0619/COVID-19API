@@ -10,7 +10,7 @@ async def cleanText(text):
     loop = Performance()
     # cleanT = await loop.run_in_executor(None, re.sub, "<.+?>", "", str(text), 0, re.I|re.S)
     cleanT = await loop.run_in_threadpool(lambda: re.sub("<.+?>", "", str(text), 0, re.I|re.S))
-    return cleanT
+    return cleanT.replace("-", "0").replace(",", "")
 
 def chunker(seq, size=3):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
@@ -27,23 +27,244 @@ async def StringToInteger(string):
 
 async def JsonData(listdata):
     jsondata = [
-        {"SEOUL":{"increase": float(listdata[5].replace(",", '')),"cases": float(listdata[6].replace(",", '')),"deaths": float(listdata[7].replace(",", '')),"ratio": float(listdata[8].replace(",", '')),"inspection": float(listdata[9].replace(",", ''))}},
-        {"BUSAN":{"increase": float(listdata[10].replace(",", '')),"cases": float(listdata[11].replace(",", '')),"deaths": float(listdata[12].replace(",", '')),"ratio": float(listdata[13].replace(",", '')),"inspection": float(listdata[14].replace(",", ''))}},
-        {"DAEGU":{"increase": float(listdata[15].replace(",", '')),"cases": float(listdata[16].replace(",", '')),"deaths": float(listdata[17].replace(",", '')),"ratio": float(listdata[18].replace(",", '')),"inspection": float(listdata[19].replace(",", ''))}},
-        {"INCHEON":{"increase": float(listdata[20].replace(",", '')),"cases": float(listdata[21].replace(",", '')),"deaths": float(listdata[22].replace(",", '')),"ratio": float(listdata[23].replace(",", '')),"inspection": float(listdata[24].replace(",", ''))}},
-        {"GWANGJU":{"increase": float(listdata[25].replace(",", '')),"cases": float(listdata[26].replace(",", '')),"deaths": float(listdata[27].replace(",", '')),"ratio": float(listdata[28].replace(",", '')),"inspection": float(listdata[29].replace(",", ''))}},
-        {"DAEJEON":{"increase": float(listdata[30].replace(",", '')),"cases": float(listdata[31].replace(",", '')),"deaths": float(listdata[32].replace(",", '')),"ratio": float(listdata[33].replace(",", '')),"inspection": float(listdata[34].replace(",", ''))}},
-        {"ULSAN":{"increase": float(listdata[35].replace(",", '')),"cases": float(listdata[36].replace(",", '')),"deaths": float(listdata[37].replace(",", '')),"ratio": float(listdata[38].replace(",", '')),"inspection": float(listdata[39].replace(",", ''))}},
-        {"SEJONG":{"increase": float(listdata[40].replace(",", '')),"cases": float(listdata[41].replace(",", '')),"deaths": float(listdata[42].replace(",", '')),"ratio": float(listdata[43].replace(",", '')),"inspection": float(listdata[44].replace(",", ''))}},
-        {"GYEONGGI":{"increase": float(listdata[45].replace(",", '')),"cases": float(listdata[46].replace(",", '')),"deaths": float(listdata[47].replace(",", '')),"ratio": float(listdata[48].replace(",", '')),"inspection": float(listdata[49].replace(",", ''))}},
-        {"GANGWON":{"increase": float(listdata[50].replace(",", '')),"cases": float(listdata[51].replace(",", '')),"deaths": float(listdata[52].replace(",", '')),"ratio": float(listdata[53].replace(",", '')),"inspection": float(listdata[54].replace(",", ''))}},
-        {"CHUNGBUK":{"increase": float(listdata[55].replace(",", '')),"cases": float(listdata[56].replace(",", '')),"deaths": float(listdata[57].replace(",", '')),"ratio": float(listdata[58].replace(",", '')),"inspection": float(listdata[59].replace(",", ''))}},
-        {"CHUNGNAM":{"increase": float(listdata[60].replace(",", '')),"cases": float(listdata[61].replace(",", '')),"deaths": float(listdata[62].replace(",", '')),"ratio": float(listdata[63].replace(",", '')),"inspection": float(listdata[64].replace(",", ''))}},
-        {"JEONBUK":{"increase": float(listdata[65].replace(",", '')),"cases": float(listdata[66].replace(",", '')),"deaths": float(listdata[67].replace(",", '')),"ratio": float(listdata[68].replace(",", '')),"inspection": float(listdata[69].replace(",", ''))}},
-        {"JEONNAM":{"increase": float(listdata[70].replace(",", '')),"cases": float(listdata[71].replace(",", '')),"deaths": float(listdata[72].replace(",", '')),"ratio": float(listdata[73].replace(",", '')),"inspection": float(listdata[74].replace(",", ''))}},
-        {"GYEONGBUK":{"increase": float(listdata[75].replace(",", '')),"cases": float(listdata[76].replace(",", '')),"deaths": float(listdata[77].replace(",", '')),"ratio": float(listdata[78].replace(",", '')),"inspection": float(listdata[79].replace(",", ''))}},
-        {"GYEONGNAM":{"increase": float(listdata[80].replace(",", '')),"cases": float(listdata[81].replace(",", '')),"deaths": float(listdata[82].replace(",", '')),"ratio": float(listdata[83].replace(",", '')),"inspection": float(listdata[84].replace(",", ''))}},
-        {"JEJU":{"increase": float(listdata[85].replace(",", '')),"cases": float(listdata[86].replace(",", '')),"deaths": float(listdata[87].replace(",", '')),"ratio": float(listdata[88].replace(",", '')),"inspection": float(listdata[89].replace(",", ''))}}
+        {
+            "SEOUL":{
+                "dailyChange": {
+                    "total": float(listdata[5+3].replace(",", '')),
+                    "importedCases": float(listdata[6+3].replace(",", '')),
+                    "localOutbreak": float(listdata[7+3].replace(",", '')),
+                },
+                "increase": float(listdata[8+3].replace(",", '')),
+                "cases": float(listdata[9+3].replace(",", '')),
+                "deaths": float(listdata[10+3].replace(",", '')),
+                "ratio": float(listdata[11+3].replace(",", '')),
+                "inspection": float(listdata[12+3].replace(",", ''))
+            }
+        },
+        {
+            "BUSAN": {
+                "dailyChange": {
+                    "total": float(listdata[13+3].replace(",", '')),
+                    "importedCases": float(listdata[14+3].replace(",", '')),
+                    "localOutbreak": float(listdata[15+3].replace(",", '')),
+                },
+                "increase": float(listdata[16+3].replace(",", '')),
+                "cases": float(listdata[17+3].replace(",", '')),
+                "deaths": float(listdata[18+3].replace(",", '')),
+                "ratio": float(listdata[19+3].replace(",", '')),
+                "inspection": float(listdata[20+3].replace(",", ''))
+            }
+        },
+        {
+            "DAEGU": {
+                "dailyChange": {
+                    "total": float(listdata[21+3].replace(",", '')),
+                    "importedCases": float(listdata[22+3].replace(",", '')),
+                    "localOutbreak": float(listdata[23+3].replace(",", '')),
+                },
+                "increase": float(listdata[24+3].replace(",", '')),
+                "cases": float(listdata[25+3].replace(",", '')),
+                "deaths": float(listdata[26+3].replace(",", '')),
+                "ratio": float(listdata[27+3].replace(",", '')),
+                "inspection": float(listdata[28+3].replace(",", ''))
+            }
+        },
+        {
+            "INCHEON": {
+                "dailyChange": {
+                    "total": float(listdata[29+3].replace(",", '')),
+                    "importedCases": float(listdata[30+3].replace(",", '')),
+                    "localOutbreak": float(listdata[31+3].replace(",", '')),
+                },
+                "increase": float(listdata[32+3].replace(",", '')),
+                "cases": float(listdata[33+3].replace(",", '')),
+                "deaths": float(listdata[34+3].replace(",", '')),
+                "ratio": float(listdata[35+3].replace(",", '')),
+                "inspection": float(listdata[36+3].replace(",", ''))
+            }
+        },
+        {
+            "GWANGJU": {
+                "dailyChange": {
+                    "total": float(listdata[37+3].replace(",", '')),
+                    "importedCases": float(listdata[38+3].replace(",", '')),
+                    "localOutbreak": float(listdata[39+3].replace(",", '')),
+                },
+                "increase": float(listdata[40+3].replace(",", '')),
+                "cases": float(listdata[41+3].replace(",", '')),
+                "deaths": float(listdata[42+3].replace(",", '')),
+                "ratio": float(listdata[43+3].replace(",", '')),
+                "inspection": float(listdata[44+3].replace(",", ''))
+            }
+        },
+        {
+            "DAEJEON": {
+                "dailyChange": {
+                    "total": float(listdata[45+3].replace(",", '')),
+                    "importedCases": float(listdata[46+3].replace(",", '')),
+                    "localOutbreak": float(listdata[47+3].replace(",", '')),
+                },
+                "increase": float(listdata[48+3].replace(",", '')),
+                "cases": float(listdata[49+3].replace(",", '')),
+                "deaths": float(listdata[50+3].replace(",", '')),
+                "ratio": float(listdata[51+3].replace(",", '')),
+                "inspection": float(listdata[52+3].replace(",", ''))
+            }
+        },
+        {
+            "ULSAN": {
+                "dailyChange": {
+                    "total": float(listdata[53+3].replace(",", '')),
+                    "importedCases": float(listdata[54+3].replace(",", '')),
+                    "localOutbreak": float(listdata[55+3].replace(",", '')),
+                },
+                "increase": float(listdata[56+3].replace(",", '')),
+                "cases": float(listdata[57+3].replace(",", '')),
+                "deaths": float(listdata[58+3].replace(",", '')),
+                "ratio": float(listdata[59+3].replace(",", '')),
+                "inspection": float(listdata[60+3].replace(",", ''))
+            }
+        },
+        {
+            "SEJONG": {
+                "dailyChange": {
+                    "total": float(listdata[61+3].replace(",", '')),
+                    "importedCases": float(listdata[62+3].replace(",", '')),
+                    "localOutbreak": float(listdata[63+3].replace(",", '')),
+                },
+                "increase": float(listdata[64+3].replace(",", '')),
+                "cases": float(listdata[65+3].replace(",", '')),
+                "deaths": float(listdata[66+3].replace(",", '')),
+                "ratio": float(listdata[67+3].replace(",", '')),
+                "inspection": float(listdata[68+3].replace(",", ''))
+            }
+        },
+        {
+            "GYEONGGI": {
+                "dailyChange": {
+                    "total": float(listdata[69+3].replace(",", '')),
+                    "importedCases": float(listdata[70+3].replace(",", '')),
+                    "localOutbreak": float(listdata[71+3].replace(",", '')),
+                },
+                "increase": float(listdata[72+3].replace(",", '')),
+                "cases": float(listdata[73+3].replace(",", '')),
+                "deaths": float(listdata[74+3].replace(",", '')),
+                "ratio": float(listdata[75+3].replace(",", '')),
+                "inspection": float(listdata[76+3].replace(",", ''))
+            }
+        },
+        {
+            "GANGWON": {
+                "dailyChange": {
+                    "total": float(listdata[77+3].replace(",", '')),
+                    "importedCases": float(listdata[78+3].replace(",", '')),
+                    "localOutbreak": float(listdata[79+3].replace(",", '')),
+                },
+                "increase": float(listdata[80+3].replace(",", '')),
+                "cases": float(listdata[81+3].replace(",", '')),
+                "deaths": float(listdata[82+3].replace(",", '')),
+                "ratio": float(listdata[83+3].replace(",", '')),
+                "inspection": float(listdata[84+3].replace(",", ''))
+            }
+        },
+        {
+            "CHUNGBUK": {
+                "dailyChange": {
+                    "total": float(listdata[85+3].replace(",", '')),
+                    "importedCases": float(listdata[86+3].replace(",", '')),
+                    "localOutbreak": float(listdata[87+3].replace(",", '')),
+                },
+                "increase": float(listdata[88+3].replace(",", '')),
+                "cases": float(listdata[89+3].replace(",", '')),
+                "deaths": float(listdata[90+3].replace(",", '')),
+                "ratio": float(listdata[91+3].replace(",", '')),
+                "inspection": float(listdata[92+3].replace(",", ''))
+            }
+        },
+        {
+            "CHUNGNAM": {
+                "dailyChange": {
+                    "total": float(listdata[93+3].replace(",", '')),
+                    "importedCases": float(listdata[94+3].replace(",", '')),
+                    "localOutbreak": float(listdata[95+3].replace(",", '')),
+                },
+                "increase": float(listdata[96+3].replace(",", '')),
+                "cases": float(listdata[97+3].replace(",", '')),
+                "deaths": float(listdata[98+3].replace(",", '')),
+                "ratio": float(listdata[99+3].replace(",", '')),
+                "inspection": float(listdata[100+3].replace(",", ''))
+            }
+        },
+        {
+            "JEONBUK": {
+                "dailyChange": {
+                    "total": float(listdata[101+3].replace(",", '')),
+                    "importedCases": float(listdata[102+3].replace(",", '')),
+                    "localOutbreak": float(listdata[103+3].replace(",", '')),
+                },
+                "increase": float(listdata[104+3].replace(",", '')),
+                "cases": float(listdata[105+3].replace(",", '')),
+                "deaths": float(listdata[106+3].replace(",", '')),
+                "ratio": float(listdata[107+3].replace(",", '')),
+                "inspection": float(listdata[108+3].replace(",", ''))
+            }
+        },
+        {
+            "JEONNAM": {
+                "dailyChange": {
+                    "total": float(listdata[109+3].replace(",", '')),
+                    "importedCases": float(listdata[110+3].replace(",", '')),
+                    "localOutbreak": float(listdata[111+3].replace(",", '')),
+                },
+                "increase": float(listdata[112+3].replace(",", '')),
+                "cases": float(listdata[123+3].replace(",", '')),
+                "deaths": float(listdata[124+3].replace(",", '')),
+                "ratio": float(listdata[125+3].replace(",", '')),
+                "inspection": float(listdata[126+3].replace(",", ''))
+            }
+        },
+        {
+            "GYEONGBUK": {
+                "dailyChange": {
+                    "total": float(listdata[127+3].replace(",", '')),
+                    "importedCases": float(listdata[128+3].replace(",", '')),
+                    "localOutbreak": float(listdata[129+3].replace(",", '')),
+                },
+                "increase": float(listdata[130+3].replace(",", '')),
+                "cases": float(listdata[131+3].replace(",", '')),
+                "deaths": float(listdata[132+3].replace(",", '')),
+                "ratio": float(listdata[133+3].replace(",", '')),
+                "inspection": float(listdata[134+3].replace(",", ''))
+            }
+        },
+        {
+            "GYEONGNAM": {
+                "dailyChange": {
+                    "total": float(listdata[135+3].replace(",", '')),
+                    "importedCases": float(listdata[136+3].replace(",", '')),
+                    "localOutbreak": float(listdata[137+3].replace(",", '')),
+                },
+                "increase": float(listdata[138+3].replace(",", '')),
+                "cases": float(listdata[139+3].replace(",", '')),
+                "deaths": float(listdata[140+3].replace(",", '')),
+                "ratio": float(listdata[141+3].replace(",", '')),
+                "inspection": float(listdata[142+3].replace(",", ''))
+            }
+        },
+        {
+            "JEJU": {
+                "dailyChange": {
+                    "total": float(listdata[143+3].replace(",", '')),
+                    "importedCases": float(listdata[144+3].replace(",", '')),
+                    "localOutbreak": float(listdata[145+3].replace(",", '')),
+                },
+                "increase": float(listdata[149].replace(",", '')),
+                "cases": float(listdata[150].replace(",", '')),
+                "deaths": str(listdata[151].replace(",", '')),
+                "ratio": float(listdata[152].replace(",", '')),
+                "inspection": float(listdata[153].replace(",", ''))
+            }
+        }
     ]
     return jsondata
 

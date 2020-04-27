@@ -1,3 +1,5 @@
+from typing import List
+
 from scrapy.selector import Selector
 from app.crawler.utils.ext import KcdcApi, cleanText, StringToInteger, JsonData
 from app.ext.utils.Performance import Performance
@@ -14,7 +16,7 @@ class InfectiousDiseases:
     def __init__(self, mode=11):
         self.loop = Performance()
         self.data = KcdcApi(mode=mode)
-    
+
     async def Convert(self):
         data = await self.data.GetInfectiousDiseases2()
         _data = await self.data.GetInfectiousDiseases4()
@@ -108,7 +110,7 @@ class InfectiousDiseases:
         """
         data = await self.data.GetInfectiousDiseases3()
         soup = await self.loop.run_in_threadpool(lambda: Selector(text=data))
-        
+
         """Inspection completed"""
         InIsolation = await self.loop.run_in_threadpool(lambda: soup.xpath('//*[@id="content"]/div/div[3]/table/tbody/tr/td[1]')) # 격리중
         Quarantine = await self.loop.run_in_threadpool(lambda: soup.xpath('//*[@id="content"]/div/div[3]/table/tbody/tr/td[2]')) # 격리 해제
@@ -150,28 +152,56 @@ class GetInfectiousDiseasesbyRegion:
         self.loop = Performance()
 
     async def Crawler(self) -> list:
-        soup = await self.data.GetInfectiousDiseases()
-        tbody = await self.loop.run_in_threadpool(lambda: soup.find('tbody'))
-        td = await self.loop.run_in_threadpool(lambda: tbody.find_all('td'))
+        soup = await self.data.GetInfectiousDiseases2()
+        tbody = await self.loop.run_in_threadpool(lambda: Selector(text=soup))
+        _tbody = await self.loop.run_in_threadpool(lambda: tbody.xpath('//*[@id="content"]/div/div[5]/table/tbody'))
+        _td = await self.loop.run_in_threadpool(lambda: _tbody.css('tr > td'))
+        td = await self.loop.run_in_threadpool(lambda:_td.getall())
         return td
 
     async def SubCrawler(self):
         parser = GetInfectiousDiseasesbyRegion()
         data = await parser.Crawler()
         info = data
-        stat = []
-        for x in range(len(info)):
-            inf = await cleanText(text=info[x])
-            stat.append(inf)
+        stat = [float(await cleanText(items.strip())) for items in info]
         return stat
 
-    async def AllRegion(self) -> list:
-        #TODO: 귀차니즘의 결과물
+    @staticmethod
+    async def AllRegion() -> list:
+        """
+        X = 8, Y = 19
+
+        152 / 8 = 19
+        list 안 데이터 를 8개씩 자르고
+        이 과정을 19번 처리
+        """
         data = GetInfectiousDiseasesbyRegion()
-        listdata = await data.SubCrawler()
-        jsonData = await JsonData(listdata)
-        return jsonData
-    
+        data = await data.SubCrawler()
+        covertData = []; count = 0; div = 8
+        length = len(data)
+
+        r = None
+        append2 = covertData.append
+        for source in range(count, length + div, div):
+            res = data[count:count + div]
+            if res != []:
+                r: List[float] = res
+            count = count + div
+            append2(r)
+        result = covertData[1:]
+        jsonTemplate = {
+            "status": True,
+            "data": {
+                "seoul": {
+
+                }
+            }
+        }
+        return jsonTemplate
+
+
+
+
     async def Classification(self, regionNumber: int):
         data = GetInfectiousDiseasesbyRegion()
         rt = await data.AllRegion()
