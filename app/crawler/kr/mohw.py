@@ -1,9 +1,11 @@
-from typing import List
+from typing import List, Dict, Optional
 
 from scrapy.selector import Selector
-from app.crawler.utils.ext import KcdcApi, cleanText, StringToInteger, JsonData
+from app.crawler.utils.ext import KcdcApi, cleanText, StringToInteger
 from app.ext.utils.Performance import Performance
 from app.ext.utils.route import route
+
+from . import __korea_region__
 
 
 class InfectiousDiseases:
@@ -189,18 +191,26 @@ class GetInfectiousDiseasesbyRegion:
             count = count + div
             append2(r)
         result = covertData[1:]
-        jsonTemplate = {
-            "status": True,
-            "data": {
-                "seoul": {
-
+        sourceX = list(zip(result, __korea_region__))
+        nv = []; appendNv = nv.append
+        for A in sourceX:
+            xyz = {
+                    "region": A[1],
+                    "data": {
+                        "cases": A[0][3],
+                        "isolated": A[0][4],
+                        "quarantine": A[0][5],
+                        "deceased": A[0][6],
+                        "incidence": A[0][7],
+                        "daily": {
+                            "change": A[0][0],
+                            "cases": A[0][1],
+                            "localOutbreak": A[0][2],
+                        },
+                    },
                 }
-            }
-        }
-        return jsonTemplate
-
-
-
+            appendNv(xyz)
+        return nv
 
     async def Classification(self, regionNumber: int):
         data = GetInfectiousDiseasesbyRegion()
