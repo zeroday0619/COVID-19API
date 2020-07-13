@@ -27,8 +27,8 @@ class CSSEParser:
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.serviceLinks, params=self.query_syn) as resp:
-                jtext = await resp.text()
-        return jtext
+                j_text = await resp.text()
+        return j_text
     
     async def _return_wd_dat(self):
         data = await self.Processing()

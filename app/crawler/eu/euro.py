@@ -10,6 +10,6 @@ class Euro:
         self.source = Ecdc()
 
     async def EuroCovid(self):
-        listdata = await self.source.ConvertList()
-        result = await EuroJsonData(listdata)
+        list_data = await self.source.ConvertList()
+        result = await EuroJsonData(list_data)
         return result

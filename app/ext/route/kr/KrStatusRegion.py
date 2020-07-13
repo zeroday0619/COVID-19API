@@ -1,10 +1,10 @@
 import ujson
-from app.crawler.kr.mohw import GetInfectiousDiseasesbyRegion
+from app.crawler.kr.mohw import GetInfectiousDiseasesRegion
 
 
 async def KrStatusRegion(cache, loop):
     if not await cache.exists('region'):
-        data = GetInfectiousDiseasesbyRegion()
+        data = GetInfectiousDiseasesRegion()
         result = await data.AllRegion()
         jsondata = {
             "region": result

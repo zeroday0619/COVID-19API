@@ -28,8 +28,8 @@ class Paser:
         return InspectionList
 
     async def CumulativeInspection(self):
-        il = await Paser().Select()
-        jsondata = {
+        il = await self.Select()
+        json_data = {
             "inspection":{
                 "accumulate": int(il[1].replace(",", '').replace("건", '')),
                 "completions": int(il[3].replace(",", '').replace("건", '')),
@@ -37,4 +37,4 @@ class Paser:
             },
             "description": il[6]
         }
-        return jsondata
+        return json_data

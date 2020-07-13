@@ -1,5 +1,5 @@
 from app.ext.route.kr.KrCumulative import KrCumulativeInspection
-from app.crawler.kr.mohw import GetInfectiousDiseasesbyRegion
+from app.crawler.kr.mohw import GetInfectiousDiseasesRegion
 from app.ext.route.kr.krstatus import InspectionDetail
 from app.ext.route.kr.KrStatusRegion import KrStatusRegion
 from app.ext.route.kr.location import loc
@@ -57,7 +57,7 @@ async def ClassificationCOVID19(location: str, cache: aioredis.Redis = fastapi.D
     ## 대한민국 질병관리본부
     -	http://ncov.mohw.go.kr/
     """
-    data = GetInfectiousDiseasesbyRegion()
+    data = GetInfectiousDiseasesRegion()
     Result = await loc(location=location, data=data, loop=loop, cache=cache)
     return Result
 

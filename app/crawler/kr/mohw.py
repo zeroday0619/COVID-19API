@@ -56,7 +56,6 @@ class InfectiousDiseases:
         __TodayCases = await self.loop.run_in_threadpool(lambda: aTodayCases.getall()[0])
         __TodayRecovered = await self.loop.run_in_threadpool(lambda: aTodayRecovered.getall()[0])
 
-
         Patient_ = await cleanText(_Patient)
         Quarantine_ = await cleanText(_Quarantine)
         InIsolation_ = await cleanText(_InIsolation)
@@ -78,8 +77,8 @@ class InfectiousDiseases:
         # The day before
         BeforePatient = await StringToInteger(string=dBeforePatient) # 전일대비 확진 환자
         BeforeQuarantine = await StringToInteger(string=dBeforeQuarantine) # 전일대비 격리 중
-        BefroeInIsolation = await StringToInteger(string=dBeforeInIsolation) # 전일대비 격리 해제
-        BefroeDeath = await StringToInteger(string=dBeforeDeath) # 전일대비 사망
+        BeforeInIsolation = await StringToInteger(string=dBeforeInIsolation) # 전일대비 격리 해제
+        BeforeDeath = await StringToInteger(string=dBeforeDeath) # 전일대비 사망
 
         TodayCases = await StringToInteger(_TodayCases)
         TodayRecovered = await StringToInteger(_TodayRecovered)
@@ -92,9 +91,9 @@ class InfectiousDiseases:
             "quarantine": Quarantine,
             "beforeQuarantine": BeforeQuarantine,
             "recovered": InIsolation,
-            "beforeRecovered": BefroeInIsolation,
+            "beforeRecovered": BeforeInIsolation,
             "death": death,
-            "beforeDeath": BefroeDeath
+            "beforeDeath": BeforeDeath
         }
         return result
 
@@ -133,7 +132,7 @@ class InfectiousDiseases:
         f = await cleanText(await self.loop.run_in_threadpool(lambda: InspectionCompleted.getall()[0]))
         g = await cleanText(await self.loop.run_in_threadpool(lambda: UnderInspection.getall()[0]))
         h = await cleanText(await self.loop.run_in_threadpool(lambda: Total.getall()[0]))
-        jsondata = {
+        json_data = {
             "cases": {
                 "recovered": int(a.replace(",", '')),
                 "quarantine": int(b.replace(",", '')),
@@ -145,10 +144,10 @@ class InfectiousDiseases:
             "underInspection": int(g.replace(",", '')),
             "total": int(h.replace(",", ''))
         }
-        return jsondata
+        return json_data
 
 
-class GetInfectiousDiseasesbyRegion:
+class GetInfectiousDiseasesRegion:
     def __init__(self, mode=13):
         self.data = KcdcApi(mode=mode)
         self.loop = Performance()
@@ -162,14 +161,11 @@ class GetInfectiousDiseasesbyRegion:
         return td
 
     async def SubCrawler(self):
-        parser = GetInfectiousDiseasesbyRegion()
-        data = await parser.Crawler()
-        info = data
-        stat = [float(await cleanText(items.strip())) for items in info]
+        data = await self.Crawler()
+        stat = [float(await cleanText(items.strip())) for items in data]
         return stat
 
-    @staticmethod
-    async def AllRegion() -> list:
+    async def AllRegion(self) -> list:
         """
         X = 8, Y = 19
 
@@ -177,22 +173,30 @@ class GetInfectiousDiseasesbyRegion:
         list 안 데이터 를 8개씩 자르고
         이 과정을 19번 처리
         """
-        data = GetInfectiousDiseasesbyRegion()
-        data = await data.SubCrawler()
-        covertData = []; count = 0; div = 8
-        length = len(data)
-
         r = None
+        covertData = []
+        nv = []
+
+        count = 0
+        div = 8
+
+        data = await self.SubCrawler()
+
+        length = len(data)
         append2 = covertData.append
+
+        # return covertData
         for source in range(count, length + div, div):
             res = data[count:count + div]
             if res != []:
                 r: List[float] = res
             count = count + div
             append2(r)
+
         result = covertData[1:]
         sourceX = list(zip(result, __korea_region__))
-        nv = []; appendNv = nv.append
+
+        appendNv = nv.append
         for A in sourceX:
             xyz = {
                     "region": A[1],
@@ -213,9 +217,8 @@ class GetInfectiousDiseasesbyRegion:
         return nv
 
     async def Classification(self, regionNumber: int):
-        data = GetInfectiousDiseasesbyRegion()
-        rt = await data.AllRegion()
-        jsondata = await route(data=rt, regionNumber=regionNumber)
-        return jsondata
+        rt = await self.AllRegion()
+        json_data = await route(data=rt, regionNumber=regionNumber)
+        return json_data
 
 

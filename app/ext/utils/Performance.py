@@ -26,6 +26,7 @@ class Performance:
             return data
         ```
         """
+
         global running_threads
 
         while self.running_threads >= self.max_threads:
