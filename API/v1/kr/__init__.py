@@ -20,15 +20,15 @@ class KrRouter(APIRouter()):
         super().__init__()
 
 
-@KrRouter.get("/status")
-async def COVID19Status(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
-    """# 국내 COVID-19 현황
-    ## 대한민국 질병관리본부
-    -http://ncov.mohw.go.kr/
-
-    """
-    Result = await krstatus(cache=cache, loop=loop)
-    return Result
+#@KrRouter.get("/status")
+#async def COVID19Status(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+#    """# 국내 COVID-19 현황
+#    ## 대한민국 질병관리본부
+#    -http://ncov.mohw.go.kr/
+#
+#    """
+#    Result = await krstatus(cache=cache, loop=loop)
+#    return Result
 
 
 @KrRouter.get("/status/region")
@@ -41,26 +41,26 @@ async def covidIDR(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depen
     return Result
 
 
-@KrRouter.get("/status/region/{location}")
-async def ClassificationCOVID19(location: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
-    """# 지역별 COVID-19 선택 현황 조회
-    ## location
-        - seoul		- chungbuk
-        - busan		- chungnam
-        - daegu		- jeonbuk
-        - incheon	- jeonnam
-        - gwangju	- gyeongbuk
-        - daejeon	- gyeongnam
-        - ulsan		- jeju
-        - sejong	- gyeonggi
-        - gangwon
-    ## 대한민국 질병관리본부
-    -	http://ncov.mohw.go.kr/
-    """
-    data = GetInfectiousDiseasesRegion()
-    Result = await loc(location=location, data=data, loop=loop, cache=cache)
-    return Result
-
+#@KrRouter.get("/status/region/{location}")
+#async def ClassificationCOVID19(location: str, cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+#    """# 지역별 COVID-19 선택 현황 조회
+#    ## location
+#        - seoul		- chungbuk
+#        - busan		- chungnam
+#        - daegu		- jeonbuk
+#        - incheon	- jeonnam
+#        - gwangju	- gyeongbuk
+#        - daejeon	- gyeongnam
+#        - ulsan		- jeju
+#        - sejong	- gyeonggi
+#        - gangwon
+#    ## 대한민국 질병관리본부
+#    -	http://ncov.mohw.go.kr/
+#    """
+#    data = GetInfectiousDiseasesRegion()
+#    Result = await loc(location=location, data=data, loop=loop, cache=cache)
+#    return Result
+#
 
 @KrRouter.get("/status/inspection")
 async def CumulativeInspection(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
@@ -69,11 +69,11 @@ async def CumulativeInspection(cache: aioredis.Redis = fastapi.Depends(fastapi_p
     return Result
 
 
-@KrRouter.get("/status/inspection/detail")
-async def _InspectionDetail(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
-    """## 국내 검사 현황 상세 조회"""
-    Result = await InspectionDetail(cache=cache, loop=loop)
-    return Result
+#@KrRouter.get("/status/inspection/detail")
+#async def _InspectionDetail(cache: aioredis.Redis = fastapi.Depends(fastapi_plugins.depends_redis), ) -> typing.Dict:
+#    """## 국내 검사 현황 상세 조회"""
+#    Result = await InspectionDetail(cache=cache, loop=loop)
+#    return Result
 
 
 @KrRouter.get("/news")

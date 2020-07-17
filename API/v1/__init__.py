@@ -9,10 +9,12 @@ router.include_router(
     KrRouter,
     prefix="/kr"
 )
-router.include_router(
-    EuropeRouter,
-    prefix="/eu"
-)
+
+# router.include_router(
+#    EuropeRouter,
+#    prefix="/eu"
+# )
+
 router.include_router(
     GlobalRouter,
     prefix="/global"
