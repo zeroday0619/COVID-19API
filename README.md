@@ -7,7 +7,7 @@
 
 ---
 
-COVID-19API는 대한민국 질병관리본부가 공개한 자료를 사용하며 해외 정보는 Coronavirus COVID-19 (CSSE) at Johns Hopkins University (JHU)를 사용합니다.
+COVID-19API 는 대한민국 질병관리본부가 공개한 자료를 사용하며 해외 정보는 Coronavirus COVID-19 (CSSE) at Johns Hopkins University (JHU)를 사용합니다.
 
 COVID-19API uses data published by the Korea Centers for Disease Control and Prevention, and Coronavirus COVID-19 (CSSE) at Johns Hopkins University (JHU) for overseas information.
 
@@ -72,4 +72,3 @@ print(result)
 --> [**MIT License**](https://github.com/zeroday0619/COVID-19API/blob/master/LICENSE)
 **Copyright (c) 2020 zeroday0619/Euiseo Cha**
 - zeroday0619@kakao.com
-- EuiseoCha@zeroday0619.dev

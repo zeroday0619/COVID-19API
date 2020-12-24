@@ -3,6 +3,7 @@
 :contact: zeroday0619(at)kakao.com
 :copyright: Copyright 2020, zeroday0619
 """
+'''
 import pydantic
 import fastapi_plugins
 from fastapi import FastAPI
@@ -39,3 +40,16 @@ async def on_shutdown() -> None:
     await fastapi_plugins.redis_plugin.terminate()
 
 app.include_router(router, prefix="/v1", tags=["v1"])
+'''
+import asyncio
+import ujson
+from app.v2.crawler.kr import KDCA
+
+
+async def main():
+    app = KDCA()
+    o = await app.covid_data()
+    json_data: dict = ujson.dumps(o, indent=4, ensure_ascii=False)
+    print(json_data)
+
+asyncio.run(main())
