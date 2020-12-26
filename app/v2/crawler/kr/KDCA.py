@@ -51,7 +51,7 @@ class KDCA:
         return nx
 
     @staticmethod
-    async def re_pack(source, key):
+    async def re_pack(source, key) -> list:
         """
 
         """
@@ -64,7 +64,7 @@ class KDCA:
             _index(js_d)
         return index
 
-    async def parse_html(self):
+    async def parse_html(self) -> dict:
         html = await self.get_html()
         source = Selector(text=html)
 
@@ -93,7 +93,7 @@ class KDCA:
             raise HTTPException(status_code=500, detail=ex)
         return result
 
-    async def covid_data(self):
+    async def covid_data(self) -> list:
         source = await self.parse_html()
         pack_1 = await self.re_pack(source, "region")
         pack_2 = await self.re_pack(source, "daily_change")
