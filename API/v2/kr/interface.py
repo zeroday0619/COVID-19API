@@ -15,6 +15,15 @@ class KCDAModel(BaseModel):
     data: list[DATAModel]
 
 
-class KCDAResponseA(BaseModel):
+class KDCAResponse(BaseModel):
     response: list[KCDAModel]
+    timestamp: float
+
+
+class RegionList(BaseModel):
+    regionList: list[str]
+
+
+class KDCAResponseX(BaseModel):
+    response: RegionList
     timestamp: float

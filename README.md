@@ -11,34 +11,22 @@ COVID-19API 는 대한민국 질병관리본부가 공개한 자료를 사용하
 
 COVID-19API uses data published by the Korea Centers for Disease Control and Prevention, and Coronavirus COVID-19 (CSSE) at Johns Hopkins University (JHU) for overseas information.
 
-    + NAVER NEWS, KCDC, ECDC, Johns Hopkins University(CSSE) 
+    + NAVER NEWS, KCDC, Johns Hopkins University(CSSE)
 
 ## Installation
-
 - Ubuntu
 
 ```shell
-sudo apt-get install redis-server
-sudo systemctl enable redis-server.service
-```
-
-```shell
 git clone https://github.com/zeroday0619/COVID-19API.git
 cd COVID-19API
 ```
 
 ```shell
 python3.8 -m pip install -r requirements.txt
-sudo uvicorn run:app --host 0.0.0.0 --port 80
+python3 run.py
 ```
 
 - Mac OS
-
-```shell
-brew install redis
-brew services start redis
-```
-
 ```shell
 git clone https://github.com/zeroday0619/COVID-19API.git
 cd COVID-19API
@@ -46,29 +34,16 @@ cd COVID-19API
 
 ```shell
 python3.8 -m pip install -r requirements.txt
-sudo uvicorn run:app --host 0.0.0.0 --port 80
+python3 run.py
 ```
 
 ## Usage
 
 ### - API Documentation
-
   - [https://ncov.zeroday0619.dev/docs](https://ncov.zeroday0619.dev/docs)
   - [https://ncov.zeroday0619.dev/redoc](https://ncov.zeroday0619.dev/redoc)
 
-### - Example
-
-```python
-import requests
-import json
-url = "https://ncov.zeroday0619.dev/v1/kr/status"
-resp = requests.get(url).json()
-result = resp['krstatus']
-print(result)
-```
-
 
 ## License
+**Copyright (c) 2020 zeroday0619**
 --> [**MIT License**](https://github.com/zeroday0619/COVID-19API/blob/master/LICENSE)
-**Copyright (c) 2020 zeroday0619/Euiseo Cha**
-- zeroday0619@kakao.com

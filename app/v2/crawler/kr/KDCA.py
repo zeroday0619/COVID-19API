@@ -52,9 +52,6 @@ class KDCA:
 
     @staticmethod
     async def re_pack(source, key) -> list:
-        """
-
-        """
         index = []
         _index = index.append
         for x in source[key]:
@@ -92,6 +89,19 @@ class KDCA:
         except ValidationError as ex:
             raise HTTPException(status_code=500, detail=ex)
         return result
+
+    async def region_list(self) -> dict:
+        source = await self.parse_html()
+        region = await self.re_pack(source, "region")
+
+        nx = []
+        _nx = nx.append
+        for i in region:
+            _nx(i['region'])
+        json_data = {
+            "regionList": nx
+        }
+        return json_data
 
     async def covid_data(self) -> list:
         source = await self.parse_html()

@@ -1,5 +1,7 @@
 import datetime as pydatetime
 
+__all__ = ['get_now_timestamp']
+
 
 def get_now():
     """현재 시스템 시간을 datetime 형으로 반환"""
