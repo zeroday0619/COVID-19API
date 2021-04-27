@@ -84,7 +84,7 @@ class KDCA:
         src = await self.parse_html()
         pack = {
             'daily_change': src[1][0],
-            'confirmed_cases': [2][0],
+            'confirmed_cases': src[2][0],
             'isolated': src[3][0],
             'recovered': src[4][0],
             'deceased': src[5][0],
@@ -142,5 +142,14 @@ class KDCA:
                 ],
             }
             _update(json_model)
-
         return update
+
+    async def selectRegion(self, region) -> Union[dict, None]:
+        source = await self.covid_data()
+        for reg in source:
+            if reg["region"] == region:
+                return {
+                    "region": reg["region"],
+                    "data": reg["data"][0]
+                }
+        return None

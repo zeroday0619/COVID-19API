@@ -2,6 +2,7 @@ from typing import Union
 from pydantic import BaseModel
 from .kdca import KDCAResponseModel as KDCARM
 from .kdca import DATAModel
+from .kdca import KDCASelectResponseModel
 
 
 class system(BaseModel):
@@ -25,3 +26,9 @@ class KRTotalModel(BaseModel):
     status: bool
     system: system
     source: Union[DATAModel, None]
+
+
+class KRSelectResponseModel(BaseModel):
+    status: bool
+    system: system
+    source: Union[KDCASelectResponseModel, None]

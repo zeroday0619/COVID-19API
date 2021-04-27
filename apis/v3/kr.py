@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from app.core import KDCA
 from app.Util.converter import convertStruct
+from app.Models import KRSelectResponseModel
 from app.Models import KRResponseModel
 from app.Models import RegionListModel
 from app.Models import KRTotalModel
@@ -24,6 +25,25 @@ async def total():
 async def region_list():
     kdca = KDCA()
     source = await kdca.region_list()
+    return await convertStruct(
+        source=source,
+        status=True,
+        code=200,
+        message="OK"
+    )
+
+
+@kr.get(path="/region/{region}", response_model=KRSelectResponseModel)
+async def select_region(region: str):
+    kdca = KDCA()
+    source = await kdca.selectRegion(region)
+    if source is None:
+        return await convertStruct(
+            source=None,
+            status=False,
+            code=400,
+            message=f"Invalid region: {region}"
+        )
     return await convertStruct(
         source=source,
         status=True,

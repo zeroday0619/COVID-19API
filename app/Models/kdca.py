@@ -24,3 +24,8 @@ class DATAModel(BaseModel):
 class KDCAResponseModel(BaseModel):
     region: str
     data: list[DATAModel]
+
+
+class KDCASelectResponseModel(BaseModel):
+    region: str
+    data: DATAModel
