@@ -8,6 +8,7 @@ __version__ = "Ver 3.0"
 import uvicorn
 from fastapi import FastAPI
 from apis import root
+from starlette.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(
@@ -20,5 +21,12 @@ app = FastAPI(
 
 
 if __name__ == "__main__":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.include_router(router=root, prefix="/api")
-    uvicorn.run(app)
+    uvicorn.run(app, host="127.0.0.1", port=8899)
