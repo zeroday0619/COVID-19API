@@ -5,5 +5,5 @@ fastapi-plugins[all]
 pydantic
 Scrapy
 aiohttp
-
+covid-vaccine-stat
 uvicorn
