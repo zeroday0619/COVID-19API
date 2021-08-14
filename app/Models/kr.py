@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 from pydantic import BaseModel
 from .kdca import KDCAResponseModel as KDCARM
 from .kdca import DATAModel
@@ -38,3 +38,7 @@ class KRVacModel(BaseModel):
     system: system
     source: Union[VAC_ROOT_DATA, None]
     
+class KRVacRgsModel(BaseModel):
+    status: bool
+    system: system
+    source: Union[List[VAC_ROOT_DATA], None]
