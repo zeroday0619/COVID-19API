@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from .kdca import KDCAResponseModel as KDCARM
 from .kdca import DATAModel
 from .kdca import KDCASelectResponseModel
-
+from .dgk import VAC_ROOT_DATA
 
 class system(BaseModel):
     code: int
@@ -32,3 +32,9 @@ class KRSelectResponseModel(BaseModel):
     status: bool
     system: system
     source: Union[KDCASelectResponseModel, None]
+
+class KRVacModel(BaseModel):
+    status: bool
+    system: system
+    source: Union[VAC_ROOT_DATA, None]
+    

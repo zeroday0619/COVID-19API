@@ -1,0 +1,3 @@
+import os
+
+COVID_VACCINE_STAT_API_KEY = os.environ.get("COVID_VACCINE_STAT_API_KEY")
