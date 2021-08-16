@@ -2,8 +2,8 @@ import aiohttp
 from pydantic import ValidationError
 from ..Models.kdca import KDCAModel
 from scrapy import Selector
-from fastapi import HTTPException
 from typing import Union
+from app.Exceptions import APIException
 
 
 class KDCA:
@@ -36,7 +36,14 @@ class KDCA:
         async with aiohttp.ClientSession(headers=self.headers) as session:
             async with session.get(url=self.ncov_url, params=self.params) as resp:
                 if resp.status != 200:
-                    raise HTTPException(status_code=resp.status, detail="Processing Error")
+                    raise APIException(
+                        status=False,
+                        system={
+                            "message": "KDCA connection error",
+                            "code": resp.status,
+                        },
+                        source=None
+                    )
                 res: str = await resp.text()
         return res
 
@@ -107,7 +114,14 @@ class KDCA:
             re_typed = KDCAModel(**dict(pack))
             result = re_typed.dict()
         except ValidationError as ex:
-            raise HTTPException(status_code=500, detail=ex)
+            raise APIException(
+                status=False,
+                system={
+                    "message": f"KDCA data type validation error: {ex}",
+                    "code": 422,
+                },
+                source=None
+            )
         return result
 
     async def region_list(self) -> list:

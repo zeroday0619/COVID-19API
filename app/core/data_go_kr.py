@@ -1,11 +1,8 @@
-import asyncio
-
-from typing import Optional, List, Union
+from typing import List, Union
 from covid_vaccine_stat import async_request
-from covid_vaccine_stat.model import VACCINE_STAT_API
 from covid_vaccine_stat.model import VACCINE_STAT_MODEL
 from app.config import COVID_VACCINE_STAT_API_KEY
-from app.Models.dgk import VAC_ROOT_DATA
+from app.Exceptions import APIException
 
 
 class COVID_VACCINE_STAT:
@@ -18,7 +15,14 @@ class COVID_VACCINE_STAT:
         try:
             return await async_request.fetch(api_key=self.api_token, page=page, per_page=per_page)
         except TypeError:
-            raise TypeError("Please set the COVID_VACCINE_STAT_API_KEY environment variable")
+            raise APIException(
+                status=False,
+                system={
+                    "message": "Internel Server Error",
+                    "code": 500
+                },
+                source=None
+            )
     
     async def south_korea_stat(self, n: int, i: int = 1) -> Union[VACCINE_STAT_MODEL, List[VACCINE_STAT_MODEL]]:
         """
@@ -39,7 +43,14 @@ class COVID_VACCINE_STAT:
         elif n == 2:
             source = resp.data
         else:
-            raise ValueError("Invalid argument")
+            raise APIException(
+                status=False,
+                system={
+                    "message": "Internal Server Error",
+                    "code": 500
+                },
+                source=None
+            )
         return source
     
     async def get_regions(self) -> List[str]:

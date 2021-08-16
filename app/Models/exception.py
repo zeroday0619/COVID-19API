@@ -21,7 +21,7 @@ class SystemModel(BaseModel):
 class BaseExceptionToJsonModel(BaseModel):
     status: bool
     system: SystemModel
-    data: None
+    source: None
 
 
 __all__ = ['BaseExceptionToJsonModel']

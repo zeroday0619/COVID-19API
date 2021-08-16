@@ -6,9 +6,16 @@
 __version__ = "Ver 3.1"
 
 import uvicorn
+
 from fastapi import FastAPI
-from apis import root
+from fastapi.responses import UJSONResponse
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from app.Exceptions import APIException
+from fastapi.exceptions import ValidationError
+
+from app.Util.converter import convertStruct
+from apis import root
 
 
 app = FastAPI(
@@ -18,6 +25,19 @@ app = FastAPI(
     version=__version__,
     debug=False
 )
+
+
+@app.exception_handler(APIException)
+async def unicorn_exception_handler(request: Request, exc: APIException):
+    return UJSONResponse(
+        status_code=exc.system.get("code"),
+        content=await convertStruct(
+            source=exc.source,
+            status=exc.status,
+            message=exc.system.get("message"),
+            code=exc.system.get("code")
+        )
+    )
 
 
 if __name__ == "__main__":
