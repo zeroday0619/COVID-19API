@@ -22,6 +22,7 @@ class BaseExceptionToJsonModel(BaseModel):
     status: bool
     system: SystemModel
     source: None
+    timestemp: float
 
 
 __all__ = ['BaseExceptionToJsonModel']

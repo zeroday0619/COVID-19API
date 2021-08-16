@@ -1,4 +1,5 @@
-from ..Models import DefaultModel
+from time import time
+from app.Models import DefaultModel
 
 
 async def convertStruct(source, status: bool, code: int, message: str) -> DefaultModel:
@@ -16,7 +17,8 @@ async def convertStruct(source, status: bool, code: int, message: str) -> Defaul
             "code": code,
             "message": message
         },
-        "source": source
+        "source": source,
+        "timestemp": time()
     }
     return frame
 
