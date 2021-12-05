@@ -6,8 +6,7 @@ class KDCAModel(BaseModel):
     region: list[str]
     daily_change: list[int]
     confirmed_cases: list[int]
-    isolated: list[int]
-    recovered: list[int]
+    release_of_quarantine: list[int]
     deceased: list[int]
     incidence: list[float]
 
@@ -15,8 +14,7 @@ class KDCAModel(BaseModel):
 class DATAModel(BaseModel):
     daily_change: int
     confirmed_cases: int
-    isolated: int
-    recovered: int
+    release_of_quarantine: int
     deceased: int
     incidence: float
 

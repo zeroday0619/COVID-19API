@@ -1,3 +1,4 @@
+import re
 import aiohttp
 from pydantic import ValidationError
 from ..Models.kdca import KDCAModel
@@ -30,7 +31,8 @@ class KDCA:
         # deceased
         self.dead_xpath: str = '//*[@id="content"]/div/div[5]/table/tbody/tr/td[7]/text()'
         # incidence
-        self.incidence_xpath: str = '//*[@id="content"]/div/div[5]/table/tbody/tr/td[8]/text()'
+        self.incidence_xpath: str = '/html/body/div/div[4]/div/div/div/div[5]/table/tbody/tr/td[7]'
+
 
     async def get_html(self) -> str:
         async with aiohttp.ClientSession(headers=self.headers) as session:
@@ -47,6 +49,12 @@ class KDCA:
                 res: str = await resp.text()
         return res
 
+    @staticmethod
+    def remove_tag(content):
+        cleanr =re.compile('<.*?>')
+        cleantext = re.sub(cleanr, '', content)
+        return cleantext
+    
     @staticmethod
     async def refactor(source: list) -> list:
         nx = []
@@ -73,6 +81,13 @@ class KDCA:
         source.pop(-1)
         return source
 
+    async def parse_numbers(self, source: list):
+        _ix_a = []
+        _ix = _ix_a.append
+        for ix in source:
+            _ix(self.remove_tag(ix))
+        return _ix_a
+
     async def parse_html(self) -> list:
         html = await self.get_html()
         source = Selector(text=html)
@@ -81,21 +96,19 @@ class KDCA:
         # TODO: Variable naming should be consistently modified [2]
         increasing = await self.refactor(source.xpath(self.increasing_xpath).getall())
         cc_sum = await self.refactor(source.xpath(self.cc_sum_xpath).getall())
-        isolating = await self.refactor(source.xpath(self.isolating_xpath).getall())
-        recovered = await self.refactor(source.xpath(self.recovered_xpath).getall())
-        dead = await self.refactor(source.xpath(self.dead_xpath).getall())
-        incidence = await self.refactor(source.xpath(self.incidence_xpath).getall())
-        return [region, increasing, cc_sum, isolating, recovered, dead, incidence]
+        release_of_quarantine = await self.refactor(source.xpath(self.isolating_xpath).getall())
+        dead = await self.refactor(source.xpath(self.recovered_xpath).getall())
+        incidence = await self.refactor(await self.parse_numbers(source.xpath(self.incidence_xpath).getall()))
+        return [region, increasing, cc_sum, release_of_quarantine, dead, incidence]
 
     async def get_total(self) -> dict:
         src = await self.parse_html()
         pack = {
             'daily_change': src[1][0],
             'confirmed_cases': src[2][0],
-            'isolated': src[3][0],
-            'recovered': src[4][0],
-            'deceased': src[5][0],
-            'incidence': src[6][0]
+            'release_of_quarantine': src[3][0],
+            'deceased': src[4][0],
+            'incidence': src[5][0]
         }
         return pack
 
@@ -105,10 +118,9 @@ class KDCA:
             'region': await self.delete(src[0]),
             'daily_change': await self.delete(src[1]),
             'confirmed_cases': await self.delete(src[2]),
-            'isolated': await self.delete(src[3]),
-            'recovered': await self.delete(src[4]),
-            'deceased': await self.delete(src[5]),
-            'incidence': await self.delete(src[6])
+            'release_of_quarantine': await self.delete(src[3]),
+            'deceased': await self.delete(src[4]),
+            'incidence': await self.delete(src[5])
         }
         try:
             re_typed = KDCAModel(**dict(pack))
@@ -140,8 +152,7 @@ class KDCA:
         pack_1 = await self.re_pack(source, "region")
         pack_2 = await self.re_pack(source, "daily_change")
         pack_3 = await self.re_pack(source, "confirmed_cases")
-        pack_4 = await self.re_pack(source, "isolated")
-        pack_5 = await self.re_pack(source, "recovered")
+        pack_4 = await self.re_pack(source, "release_of_quarantine")
         pack_6 = await self.re_pack(source, "deceased")
         pack_7 = await self.re_pack(source, "incidence")
 
@@ -152,7 +163,7 @@ class KDCA:
             json_model = {
                 'region': pack_1[i]['region'],
                 "data": [
-                    {**pack_2[i], **pack_3[i], **pack_4[i], **pack_5[i], **pack_6[i], **pack_7[i]}
+                    {**pack_2[i], **pack_3[i], **pack_4[i], **pack_6[i], **pack_7[i]}
                 ],
             }
             _update(json_model)
